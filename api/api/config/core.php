@@ -16,5 +16,16 @@
 
     // You can use another useful claim name called exp (expiration time) which identifies the expiration time on or after which the JWT MUST NOT be accepted for processing.
     // https://tools.ietf.org/html/rfc7519#section-4.1
+
+    class Core
+    {
+        /**
+         * Returns text with escaped html entities and removed tags
+         */
+        public static function sanitiseUserInput($data)
+        {
+            return htmlspecialchars(strip_tags($data));
+        }
+    }
         
 ?>

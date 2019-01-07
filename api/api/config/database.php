@@ -4,7 +4,7 @@ class Database{
  
     // specify your own database credentials
     private $host = "localhost";
-    private $db_name = "restapi-projekt2";
+    private $db_name = "restapi-firm";
     private $username = "root";
     private $password = "";
     public $conn;
