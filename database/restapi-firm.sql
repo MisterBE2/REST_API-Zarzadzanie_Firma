@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 07 Sty 2019, 14:21
+-- Czas generowania: 10 Sty 2019, 22:49
 -- Wersja serwera: 10.1.30-MariaDB
 -- Wersja PHP: 7.2.2
 
@@ -30,7 +30,8 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `messages` (
   `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `to_user_id` int(11) NOT NULL,
+  `from_user_id` int(11) NOT NULL,
   `message` varchar(256) COLLATE utf8_bin NOT NULL,
   `sended` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -65,6 +66,14 @@ CREATE TABLE `users` (
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatet` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Zrzut danych tabeli `users`
+--
+
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `permission`, `position`, `created`, `updatet`) VALUES
+(5, 'admin', 'admin', 'admin', '$2y$10$djnmqR3xjZRaXE6CeiZikuf.H.a0ni0ICb26mac3TVe8dMK2ALRAC', 0, 'CEO', '2019-01-10 22:06:53', '2019-01-10 21:06:53'),
+(6, 'user name', 'user last name', 'user@email.pl', '$2y$10$r9rs4kxmownDi3Nl9sYCjeJIEVRMPihSv5.vqEtXa4UWv9wIJt9Ia', 1, 'user position', '2019-01-10 22:08:21', '2019-01-10 21:08:21');
 
 --
 -- Indeksy dla zrzutów tabel
@@ -108,7 +117,7 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT dla tabeli `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -7,7 +7,8 @@
     
         // object properties
         public $id;
-        public $user_id;
+        public $to_user_id;
+        public $from_user_id;
         public $message;
         public $updated;
 
