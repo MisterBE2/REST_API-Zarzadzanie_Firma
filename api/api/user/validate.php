@@ -27,16 +27,16 @@
         // if decode succeed, show user details
         try {
             // decode jwt
-            $decoded = JWT::decode($jwt, $key, array('HS256'));
+            $decoded = JWT::decode($jwt, $api_key, array('HS256'));
     
-            // // set response code
-            // http_response_code(200);
+            // set response code
+            http_response_code(200);
     
-            // // show user details
-            // echo json_encode(array(
-            //     "message" => "Access granted.",
-            //     "data" => $decoded->data
-            // ));
+            // show user details
+            echo json_encode(array(
+                "message" => "Access granted.",
+                "data" => $decoded->data
+            ));
     
         }
     

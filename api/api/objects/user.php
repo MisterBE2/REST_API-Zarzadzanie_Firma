@@ -52,7 +52,7 @@
             $stmt->bindParam(':lastname', $this->lastname);
             $stmt->bindParam(':email', $this->email);
             $stmt->bindParam(':position', $this->position);
-            $stmt->bindParam(':permission', $this->permission);
+            $stmt->bindParam(':permission', $this->permission, PDO::PARAM_INT);
             
             // hash the password before saving to database
             $password_hash = password_hash($this->password, PASSWORD_BCRYPT);

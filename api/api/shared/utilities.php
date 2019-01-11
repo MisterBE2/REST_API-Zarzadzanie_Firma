@@ -53,6 +53,7 @@
             global $aud;
             global $iat;
             global $nbf;
+            global $api_key;
             
             $token = array(
                 "iss" => $iss,
@@ -70,7 +71,7 @@
                 );
 
                 // generate jwt
-                return JWT::encode($token, $key);
+                return JWT::encode($token, $api_key);
         }
 
         public static function encodeJWTFromUser($user)
@@ -85,6 +86,7 @@
             global $aud;
             global $iat;
             global $nbf;
+            global $api_key;
 
             $token = array(
                 "iss" => $iss,
@@ -102,7 +104,7 @@
                 );
 
                 // generate jwt
-                return JWT::encode($token, $key);
+                return JWT::encode($token, $api_key);
         }
 
         public static function validateJWTKeys($decodedJWT)
@@ -120,11 +122,11 @@
 
         public static function getJWT($raw)
         {
-            global $key;
+            global $api_key;
 
             try {
                 // decode jwt
-                return JWT::decode($raw, $key, array('HS256'));       
+                return JWT::decode($raw, $api_key, array('HS256'));       
             }
             catch (Exception $e){
                 false;
