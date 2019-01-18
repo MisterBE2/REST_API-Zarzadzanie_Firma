@@ -129,7 +129,7 @@
                 return JWT::decode($raw, $api_key, array('HS256'));       
             }
             catch (Exception $e){
-                false;
+                return false;
             }
         }
     }

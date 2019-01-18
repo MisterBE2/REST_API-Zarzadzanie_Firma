@@ -18,6 +18,7 @@
         public $position;
         public $created;
         public $updated;
+        public $oldemail;
 
         // constructor
         public function __construct($db){
@@ -25,18 +26,20 @@
             $this->permission = 1;
         }
     
-        // create new user record
+        /**
+         * Creates user
+         */
         function create(){
             
-             // insert query
-             $query = "INSERT INTO " . $this->table_name . "
-             SET
-                 firstname = :firstname,
-                 lastname = :lastname,
-                 email = :email,
-                 password = :password,
-                 position = :position,
-                 permission = :permission";
+            // insert query
+            $query = "INSERT INTO " . $this->table_name . "
+            SET
+                firstname = :firstname,
+                lastname = :lastname,
+                email = :email,
+                password = :password,
+                position = :position,
+                permission = :permission";
 
             // prepare the query
             $stmt = $this->conn->prepare($query);
@@ -46,6 +49,7 @@
             $this->lastname=Util::clear($this->lastname);
             $this->email=Util::clear($this->email);
             $this->password=Util::clear($this->password);
+            $this->position=Util::clear($this->position);
         
             // bind the values
             $stmt->bindParam(':firstname', $this->firstname);
@@ -68,7 +72,28 @@
         
             return false;
         }
-        
+
+        /**
+         * Deletes user
+         */
+        function delete(){
+            
+            // insert query
+            $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+
+            // prepare the query
+            $stmt = $this->conn->prepare($query);
+
+            // unique ID of record to be edited
+            $stmt->bindParam(':id', $this->id);
+
+            if($stmt->execute()){
+                return true;
+            }   
+
+            return false;
+        }
+
         /**
          * check if admin already exists
          */
@@ -164,7 +189,9 @@
                     SET
                         firstname = :firstname,
                         lastname = :lastname,
-                        email = :email
+                        email = :email,
+                        position = :position,
+                        permission = :permission
                         {$password_set}
                     WHERE id = :id";
         
@@ -175,11 +202,14 @@
             $this->firstname=Util::clear($this->firstname);
             $this->lastname=Util::clear($this->lastname);
             $this->email=Util::clear($this->email);
+            $this->position=Util::clear($this->position);
         
             // bind the values from the form
             $stmt->bindParam(':firstname', $this->firstname);
             $stmt->bindParam(':lastname', $this->lastname);
             $stmt->bindParam(':email', $this->email);
+            $stmt->bindParam(':position', $this->position);
+            $stmt->bindParam(':permission', $this->permission, PDO::PARAM_INT);
         
             // hash the password before saving to database
             if(!empty($this->password)){
