@@ -1,10 +1,11 @@
 <?php
     include_once '../shared/standard_headers.php';
-    
+
     // files needed to connect to database
     include_once '../config/database.php';
     include_once '../objects/user.php';
     include_once '../shared/utilities.php';
+    include_once '../shared/responses.php';
     
     // get database connection
     $database = new Database();
@@ -22,11 +23,11 @@
 
     if(!$email_exists)
     {
-        // set response code
-        http_response_code(404);
-
-        echo json_encode(array("message" => "User does not exist."));
-        exit();
+        Response::res400(
+            new ResponseBody(
+                "User does not exist.", 
+                ""
+            ));
     }
     
     // check if email exists and if password is correct
@@ -37,36 +38,26 @@
         // if generating jwt failed 
         if(!$jwt)
         {
-             // set response code
-            http_response_code(500);
-        
-            // generate jwt
-            echo json_encode(
-                array(
-                    "message" => Util::$error
-                )
-            );
-            exit();
+            Response::res400(
+                new ResponseBody(
+                    "Token generation error", 
+                    ""
+                ));
         }
 
-        // set response code
-        http_response_code(200);
-    
-        // generate jwt
-        echo json_encode(
-                array(
-                    "jwt" => $jwt
-                )
-            );
-    
+        Response::res200(
+            new ResponseBody(
+                "Tokenn created", 
+                $jwt
+            ));  
     }
     
     // login failed
     else{
-    
-        // set response code
-        http_response_code(401);
-
-        echo json_encode(array("message" => "Email or password incorrect."));
+        Response::res401(
+            new ResponseBody(
+                "Email or password incorrect.", 
+                ""
+            ));
     }
 ?>

@@ -1,12 +1,13 @@
 <?php
     include_once '../shared/standard_headers.php';
     include_once '../shared/utilities.php';
+    include_once '../shared/responses.php';
     
     // get posted data
     $data = json_decode(file_get_contents("php://input"));
     
     // get jwt
-    $jwt=isset($data->jwt) ? $data->jwt : "";
+    $jwt=isset($data->body) ? $data->body : "";
     
     // if jwt is not empty
     if($jwt){
@@ -15,34 +16,26 @@
 
         if($decoded)
         {
-            // set response code
-            http_response_code(200);
-    
-            // show user details
-            echo json_encode(array(
-                "message" => "Access granted.",
-                "data" => $decoded->data
-            ));
+            Response::res200(
+                new ResponseBody(
+                    "Access granted.",
+                    $decoded->data
+                ));
         }
         else
         {
-             // set response code
-             http_response_code(401);
-        
-             // tell the user access denied  & show error message
-             echo json_encode(array(
-                 "message" => "Access denied.",
-             ));
+            Response::res400(
+                new ResponseBody(
+                    "Access denied.",
+                    ""
+                ));
         }
     }
-    
-    // show error message if jwt is empty
     else{
-    
-        // set response code
-        http_response_code(401);
-    
-        // tell the user access denied
-        echo json_encode(array("message" => "Access denied."));
+        Response::res401(
+            new ResponseBody(
+                "No token present.",
+                ""
+            ));
     }
 ?>

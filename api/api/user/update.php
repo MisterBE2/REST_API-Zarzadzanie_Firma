@@ -1,10 +1,11 @@
 <?php
     include_once '../shared/standard_headers.php';
-    
+
     // files needed to connect to database
     include_once '../config/database.php';
     include_once '../objects/user.php';
     include_once '../shared/utilities.php';
+    include_once '../shared/responses.php';
     
     // get database connection
     $database = new Database();
@@ -34,11 +35,11 @@
     // Verify user exist
     if(!$user->emailExists() || $user->email == '')
     {
-        // set response code
-        http_response_code(400); //ok
-
-        echo json_encode(array("message" => "User does not exist."));
-        exit();
+        Response::res400(
+            new ResponseBody(
+                "User does not exist.", 
+                ""
+            ));
     }
 
     // if jwt is not empty
@@ -52,11 +53,11 @@
             {
                 if($decoded->data->email != $user->email)
                 {
-                    // set response code
-                    http_response_code(400);
-
-                    echo json_encode(array("message" => "Insufficient permission."));
-                    exit();
+                    Response::res400(
+                        new ResponseBody(
+                            "Insufficient permission.", 
+                            ""
+                        ));
                 }
             }
 
@@ -69,42 +70,36 @@
 
             // delete the user
             if($user->update()){
-            
-                // set response code
-                http_response_code(200); //ok
-            
-                // display message: user was created
-                echo json_encode(array("message" => "User updated sucesfully.", "jwt" => Util::encodeJWTFromUser($user)));
-                exit();
+                Response::res200(
+                    new ResponseBody(
+                        "User updated sucesfully.", 
+                        Util::encodeJWTFromUser($user)
+                    ));
             }
             
             // message if unable to create user
             else{
-            
-                // set response code
-                http_response_code(400); //	Bad Request
-            
-                // display message: unable to create user
-                echo json_encode(array("message" => "Update failed."));
-                exit();
+                Response::res400(
+                    new ResponseBody(
+                        "Update failed.", 
+                        ""
+                    ));
             }
         }
         else
         {
-            // set response code
-            http_response_code(401);
-        
-            // tell the user access denied
-            echo json_encode(array("message" => "Invalid token."));
-            exit();
+            Response::res401(
+                new ResponseBody(
+                    "Invalid token.", 
+                    ""
+                ));
         }
     }
     else{
-    
-        // set response code
-        http_response_code(401);
-    
-        // tell the user access denied
-        echo json_encode(array("message" => "Invalid token."));
+        Response::res401(
+            new ResponseBody(
+                "Invalid token.", 
+                ""
+            ));
     }
 ?>

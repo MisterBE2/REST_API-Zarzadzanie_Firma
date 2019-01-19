@@ -1,6 +1,7 @@
 <?php
 
     include_once "../shared/utilities.php"; 
+    include_once "status.php";
 
     class User
     {
@@ -19,11 +20,13 @@
         public $created;
         public $updated;
         public $oldemail;
+        public $status;
 
         // constructor
         public function __construct($db){
             $this->conn = $db;
             $this->permission = 1;
+            $this->status = new Status($db);
         }
     
         /**
@@ -69,7 +72,7 @@
             if($stmt->execute()){
                 return true;
             }
-        
+            
             return false;
         }
 
@@ -136,8 +139,10 @@
         function emailExists(){
         
             // query to check if email exists
-            $query = "SELECT id, firstname, lastname, password, position, permission
-                    FROM " . $this->table_name . "
+            $query = "SELECT u.id, u.firstname, u.lastname, u.password, u.position, u.permission, s.status
+                    FROM " . $this->table_name . " as u
+                        LEFT JOIN ".$this->status->table_name." as s 
+                            on s.user_id = u.id 
                     WHERE email = ?
                     LIMIT 0,1";
         
@@ -169,6 +174,7 @@
                 $this->password = $row['password'];
                 $this->permission = $row['permission'];
                 $this->position = $row['position'];
+                $this->status->status = $row['status'];
 
                 // return true because email exists in the database
                 return true;

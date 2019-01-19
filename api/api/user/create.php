@@ -1,9 +1,10 @@
 <?php
     include_once '../shared/standard_headers.php';
-    
+
     // files needed to connect to database
     include_once '../config/database.php';
     include_once '../objects/user.php';
+    include_once '../shared/responses.php';
     
     // get database connection
     $database = new Database();
@@ -18,12 +19,11 @@
     // make sure data exist
     if($data === NULL)
     {
-        // set response code
-        http_response_code(412); //Precondition Failed
-    
-        // display message: unable to create user
-        echo json_encode(array("message" => "No input given."));
-        exit();
+        Response::res401(
+            new ResponseBody(
+                "No input present.", 
+                ""
+            ));
     }
     
     // set user property values
@@ -36,29 +36,27 @@
     
     if($user->emailExists())
     {
-        // set response code
-        http_response_code(400); //ok
-
-        echo json_encode(array("message" => "User with that email already exists.", "email" => $user->email));
-        exit();
+        Response::res400(
+            new ResponseBody(
+                "User with that email already exists.", 
+                ""
+            ));
     }
     // create the user
     if($user->create()){
-    
-        // set response code
-        http_response_code(200); //ok
-    
-        // display message: user was created
-        echo json_encode(array("message" => "User was created."));
+        Response::res200(
+            new ResponseBody(
+                "User was created.", 
+                ""
+            ));
     }
     
     // message if unable to create user
     else{
-    
-        // set response code
-        http_response_code(400); //	Bad Request
-    
-        // display message: unable to create user
-        echo json_encode(array("message" => "Unable to create user."));
+        Response::res400(
+            new ResponseBody(
+                "Unable to create user.", 
+                ""
+            ));
     }
 ?>
