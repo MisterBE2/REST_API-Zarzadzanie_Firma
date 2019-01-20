@@ -98,7 +98,7 @@ function displayError(data)
 // Co-workers
 function addCoworker(firstname, lastname, position, status, email)
 {
-    let body = '<div class="border bg-white mx-2 p-3 rounded" style="width: 20em; display: inline-block;">';
+    let body = '<div class="border bg-white m-2 p-3 rounded" style="width: 20em; display: inline-block;">';
     body += '<h5 class="border-bottom">'+firstname+' '+lastname+'</h5>';
     body += '    Postition: ' + position;
 
