@@ -28,6 +28,7 @@
         <script src="res/api/message.js"></script>
         <script src="res/api/status.js"></script>
         <script src="res/login.js"></script>
+        <script src="res/responsive.js"></script>
 
     </head>
     <body onload="checkLogged()" class="bg-light text-dark" style="height:100!important">
@@ -89,7 +90,7 @@
                         </ul>
                     </div>
                     <button type="button" class="btn btn-light w-100 mb-3" id="changestatus_button" data-toggle="modal" data-target="#statusModal">Change status</button>
-                    <button type="button" class="btn btn-light w-100 mb-3   " id="createuser_button">Create user</button>
+                    <button type="button" class="btn btn-light w-100 mb-3" id="createuser_button" data-toggle="modal" data-target="#newusermodal">Create user</button>
                 </div>
 
                 <div class="col pt-4" style="overflow-y: auto" id="content">
@@ -108,21 +109,14 @@
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="statusModalBody">
                     <form class="align-self-center bg-white">
                         <div class="form-group">
-                            <label name="status" id="status_content_modal_label">Status</label>
+                            <label name="status">Status</label>
                             <textarea class="form-control" maxlength="128" name="status" id="status_content_modal"></textarea>
                             <small class="form-text text-muted" id="wordsleftstatusmodal_small">128 left</small>
                         </div>
                     </form>
-
-                    <div class="text-center mt-3" id="statussave_spinner">
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                        <p>Saving</p>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closestatusmodal_button">Close</button>
@@ -131,6 +125,51 @@
                 </div>
             </div>
         </div>
+
+        <!-- New user Modal -->
+        <div class="modal fade" id="newusermodal" tabindex="-1" role="dialog" aria-labelledby="newusermodal_label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newusermodal_label">New User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closenewusertopmodal_button">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="newUserModalBody">
+                    <div id="newusermodal_error">
+                    </div>
+                    <form class="align-self-center bg-white" id="newuser_form">
+                        <div class="form-group">
+                            <label name="firstnamemodal">Name</label>
+                            <input class="form-control" type="text" name="firstnamemodal" id="firstnamemodal" required>
+                        </div>
+                        <div class="form-group">
+                            <label name="lastnamemodal">Surname</label>
+                            <input class="form-control" type="text" name="lastnamemodal" id="lastnamemodal" required>
+                        </div>
+                        <div class="form-group">
+                            <label name="positionmodal">Position</label>
+                            <input class="form-control" type="text" name="positionmodal" minlength="5" id="positionmodal" required>
+                        </div>
+                        <div class="form-group">
+                            <label name="emailmodal">Email</label>
+                            <input class="form-control" type="text" name="emailmodal" id="emailmodal" required>
+                        </div>
+                        <div class="form-group">
+                            <label name="passwordmodal">Password</label>
+                            <input class="form-control" type="password" minlength="5" name="passwordmodal" id="passwordmodal" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closenewusermodal_button">Close</button>
+                    <button type="button" class="btn btn-primary" id="createnewusermodal_button">Save</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>   
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
         <script src="res/home.js"></script>

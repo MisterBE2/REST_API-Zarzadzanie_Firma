@@ -20,7 +20,7 @@ class User
             "password" : password
         }
 
-        console.log(data);
+        //console.log(data);
 
         $.ajax({
             method: "POST", 
@@ -74,7 +74,7 @@ class User
     create(token, password, sucess, error)
     {
         let data = {
-            "email" : this.user_to,
+            "email" : this.email,
             "body" : token,
             "firstname" : this.firstname,
             "lastname" : this.lastname,
@@ -82,15 +82,19 @@ class User
             "password" : password,
         }
 
+        console.log(data);
+
         $.ajax({
             method: "POST", 
             dataType: "json",
             url: "../../api/api/user/create.php",
             data: JSON.stringify(data),
             success: function (data) {
+                console.log(data);
                 sucess(data);
             },
             error: function (xhr, status) {
+                console.log(xhr.responseText);
                 error(xhr.responseText);
             }
         })

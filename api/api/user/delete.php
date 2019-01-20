@@ -40,8 +40,8 @@
 
     if($decoded)
     {
-        $user->email = $decoded->data->email;
-        if(!$user->emailExists() || $email == "")
+        $user->email = $data->email;
+        if(!$user->emailExists())
         {
             Response::res400(
                 new ResponseBody(
@@ -52,14 +52,11 @@
 
         if($decoded->data->permission >= 1)
         {
-            if($decoded->data->email != $user->email)
-            {
-                Response::res400(
-                    new ResponseBody(
-                        "Insufficient permission.", 
-                        ""
-                    ));
-            }
+            Response::res400(
+                new ResponseBody(
+                    "Insufficient permission.", 
+                    ""
+                ));
         }
 
             // delete the user
