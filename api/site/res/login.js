@@ -17,7 +17,8 @@ function loginSucess(data)
 
 function loginError(data)
 {
-    let message = "<div id='alert' class='alert alert-danger col-md-5 align-self-center' role='alert'>Login or password incorrect.</div>";
+    console.log(data);
+    let message = "<div id='alert' class='alert alert-danger col-md-5 mt-3 align-self-center' role='alert'>Login or password incorrect.</div>";
     $("#alert").remove();
     $('#allerts').after(message);
 }

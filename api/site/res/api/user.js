@@ -20,6 +20,8 @@ class User
             "password" : password
         }
 
+        console.log(data);
+
         $.ajax({
             method: "POST", 
             dataType: "json",

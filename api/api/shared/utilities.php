@@ -108,7 +108,6 @@
                     "email" => $user->email,
                     "position" => $user->position,
                     "permission" => $user->permission,
-                    "status" =>  $user->status->status,
                     "created" =>  $user->created,
                     "updated" =>  $user->updated
                 )
