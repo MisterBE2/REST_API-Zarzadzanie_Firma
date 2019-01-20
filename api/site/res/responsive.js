@@ -33,6 +33,20 @@ class Responsive
         $('#'+elemId).append(alert);
     }
 
+    static putAlertBefore(elemId, message)
+    {
+        let alert = "<div id='alert' class='alert alert-danger m-1 align-self-center' role='alert' id='"+elemId+"alert'>"+message+"</div>";
+        Responsive.clearAlert(elemId);
+        $('#'+elemId).prepend(alert);
+    }
+
+    static putAlert(elemId, message)
+    {
+        let alert = "<div id='alert' class='alert alert-danger m-1 align-self-center' role='alert' id='"+elemId+"alert'>"+message+"</div>";
+        Responsive.clearAlert(elemId);
+        $('#'+elemId).html(alert);
+    }
+
     static clearAlert(elemId)
     {
         $("#"+elemId+"alert").remove();

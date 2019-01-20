@@ -2,6 +2,7 @@
 
     include_once "../shared/utilities.php"; 
     include_once "status.php";
+    include_once "message.php";
 
     class User
     {
@@ -81,20 +82,50 @@
          */
         function delete(){
             
-            // insert query
-            $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+            $tempStatus = new Status($this->conn);
+            $tempMessage = new Message($this->conn);
 
-            // prepare the query
+            //Delete status
+            $query = "DELETE FROM " . $tempStatus->table_name ." WHERE user_id = :id";
             $stmt = $this->conn->prepare($query);
-
-            // unique ID of record to be edited
             $stmt->bindParam(':id', $this->id);
 
-            if($stmt->execute()){
-                return true;
+            if(!$stmt->execute()){
+                Response::res500(
+                    new ResponseBody(
+                        "Unable to delete user's status.", 
+                        $stmt->errorInfo()
+                    ));
+            }  
+
+            //Delete messages
+
+            $query = "DELETE FROM " . $tempMessage->table_name ." WHERE (from_user_id = :id OR to_user_id = :id)";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':id', $this->id);
+
+            if(!$stmt->execute()){
+                Response::res500(
+                    new ResponseBody(
+                        "Unable to delete user's messages.", 
+                        $stmt->errorInfo()
+                    ));
             }   
 
-            return false;
+            //Delete user
+            $query = "DELETE FROM " . $this->table_name ." WHERE id = :id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':id', $this->id);
+
+            if(!$stmt->execute()){
+                Response::res500(
+                    new ResponseBody(
+                        "Unable to delete user.", 
+                        $stmt->errorInfo()
+                    ));
+            }   
+
+            return true;
         }
 
         /**
@@ -176,12 +207,12 @@
                 if($stmt->rowCount()>0){
                     
                     $users = array();
-                    $tempStatus = new Status($this->conn);
-                        
+              
                     while($row = $stmt->fetch(PDO::FETCH_ASSOC))
                     {
                         extract($row);
 
+                        $tempStatus = new Status($this->conn);
                         $tempStatus->user_id = $id;
                         $tempStatus->get();
 

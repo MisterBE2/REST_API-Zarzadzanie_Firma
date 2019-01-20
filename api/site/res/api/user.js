@@ -82,7 +82,7 @@ class User
             "password" : password,
         }
 
-        console.log(data);
+        //console.log(data);
 
         $.ajax({
             method: "POST", 
@@ -90,11 +90,36 @@ class User
             url: "../../api/api/user/create.php",
             data: JSON.stringify(data),
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 sucess(data);
             },
             error: function (xhr, status) {
-                console.log(xhr.responseText);
+                //console.log(xhr.responseText);
+                error(xhr.responseText);
+            }
+        })
+    }
+
+    delete(token, sucess, error)
+    {
+        let data = {
+            "email" : this.email,
+            "body" : token
+        }
+
+        //console.log(data);
+
+        $.ajax({
+            method: "POST", 
+            dataType: "json",
+            url: "../../api/api/user/delete.php",
+            data: JSON.stringify(data),
+            success: function (data) {
+                //console.log(data);
+                sucess(data);
+            },
+            error: function (xhr, status) {
+                //console.log(xhr.responseText);
                 error(xhr.responseText);
             }
         })

@@ -2,8 +2,12 @@
 let lastStatusModalContent = $("#statusModalBody").html();
 let lastNewUserModalContent = $("#newUserModalBody").html();
 let lastNewUserModalSubmitted;
+let lastDeleteUserModalContent = $("#deleteUserMainBody").html();
 
 let mainUser = new User();
+
+let loadedUsers;
+let selectedUser;
 
 //Buttons
 $("#home").click(()=>{
@@ -19,67 +23,11 @@ $("#signout").click(function(){
     checkLogged();
 });
 
-$("#changestatus_button").click(function(){
-    $("#closestatusmodal_button").prop("disabled", false);
-    $("#closestatustopmodal_button").prop("disabled", false);
-    $("#changestatusmodal_button").prop("disabled", false);
-
-   $("#statusModalBody").html(lastStatusModalContent);
-});
-
-$("#changestatusmodal_button").click(function(){
-    $("#closestatusmodal_button").prop("disabled", true);
-    $("#closestatustopmodal_button").prop("disabled", true);
-    $("#changestatusmodal_button").prop("disabled", true);
-
-    let status = new Status(null, $("#status_content_modal").val(), null);
-    Responsive.placeSpinner("statusModalBody", "Saving");
-
-    status.set(Core.getCookie("token"), sucessChangeStatus, errorChangeStatus);
-});
-
-$("#status_content_modal").keypress(()=>{
-    $("#wordsleftstatusmodal_small").html((128-$("#status_content_modal").val().length) + " left");
-})
-
-$("#createuser_button").click(()=>{
-    Responsive.clearAlert("newusermodal_error");
-    $("#closenewusermodal_button").prop("disabled", false);
-    $("#closenewusertopmodal_button").prop("disabled", false);
-    $("#createnewusermodal_button").prop("disabled", false);
-
-    $("#newUserModalBody").html(lastNewUserModalContent);
-})
-
-$("#createnewusermodal_button").click(()=>{
-    if(validateInputs())
-    {
-        $("#closenewusermodal_button").prop("disabled", true);
-        $("#closenewusertopmodal_button").prop("disabled", true);
-        $("#createnewusermodal_button").prop("disabled", true);
-        
-        var user = new User();
-        user.firstname = $("#firstnamemodal").val();
-        user.lastname = $("#lastnamemodal").val();
-        user.email = $("#emailmodal").val();
-        user.position = $("#positionmodal").val();
-        let password = $("#passwordmodal").val()
-        console.log(user);
-
-        lastNewUserModalSubmitted = Responsive.placeSpinner("newUserModalBody", "Creating");
-        user.create(Core.getCookie("token"), password, newUserSucess, newUserError);
-    }
-});
-
-$("#newuser_form").keypress(()=>{
-    Responsive.clearAlert("newusermodal_error");
-    clearErrorInputs();
-})
 
 //User
 $(document).ready(()=>{
     mainUser.validate(Core.getCookie("token"), initialiseUser, displayError, mainUser);
-    mainUser.get(Core.getCookie("token"), null, displayUsers, displayError)
+    loadUsers();
 });
 
 function initialiseUser(data)
@@ -135,21 +83,21 @@ function addCoworker(firstname, lastname, position, status, email)
     body += '<h5 class="border-bottom">'+firstname+' '+lastname+'</h5>';
     body += '    Postition: ' + position;
 
-    if(status != null)
+    if(status === null || status == "" || status.length == 0)
     {
         body += '    <br>';
-        body += '    Status: ' + status;
     }
     else
     {
         body += '    <br>';
+        body += '    Status: ' + status;
     }
     body += '   <br>';
     body += '    <a href="#" class="badge badge-primary text-white" onclick="privateMessage(\''+email+'\')">PM</a>';
 
     if(mainUser.permission == 0)
     {
-        body += '<a href="#" class="badge badge-danger ml-1 text-white" onclick="deleteUser(\''+email+'\')">Delete</a>'
+        body += '<a href="#" class="badge badge-danger ml-1 text-white" data-toggle="modal" data-target="#deleteusermodal" onclick="deleteUser(\''+email+'\')">Delete</a>'
     }
 
     body += '</div>'
@@ -162,20 +110,91 @@ function privateMessage(email)
 
 }
 
-function deleteUser(email)
-{
-
-}
-
 function displayUsers(users)
 {   
+    console.log(users);
     clearContent();
+    loadedUsers = users;
     users.forEach(user => {
         addCoworker(user.firstname, user.lastname, user.position, user.status, user.email);
     });
 }
 
+// Delete user
+
+$("#deleteusermodal_button").click(()=>{
+    if(selectedUser != null)
+    {
+        $("#deleteusermodalclose_button").prop("disabled", true);
+        $("#deleteusermodalclosetop_button").prop("disabled", true);
+        $("#deleteusermodal_button").prop("disabled", true);
+
+        Responsive.placeSpinner("deleteUserMainBody", "Deleting");
+
+        selectedUser.delete(Core.getCookie("token"), deleteSucess, deleteError);
+    }
+});
+
+function deleteUser(email)
+{
+    $("#deleteusermodalclose_button").prop("disabled", false);
+    $("#deleteusermodalclosetop_button").prop("disabled", false);
+    $("#deleteusermodal_button").prop("disabled", false);
+
+    $("#deleteUserMainBody").html(lastDeleteUserModalContent);
+
+    selectedUser = loadedUsers.filter(obj => {
+        return obj.email == email
+    })
+
+    selectedUser = selectedUser[0];
+
+    $("#userToDelete").html(selectedUser.firstname + " " + selectedUser.lastname);
+}
+
+function deleteSucess(data)
+{
+    $("#deleteusermodal").modal("hide");
+    selectedUser = null;
+    loadUsers();
+}
+
+function deleteError(data)
+{
+    //console.log(data);
+    selectedUser = null;
+    data = JSON.parse(data);
+    //$("#deleteUserMainBody").html("Deleting failed!");
+    Responsive.putAlert("deleteUserMainBody", "<span class='font-weight-bold'>Deleting failed!</span><br><span>Server response: " + data["message"]+"</span>");
+
+    $("#deleteusermodalclose_button").prop("disabled", false);
+    $("#deleteusermodalclosetop_button").prop("disabled", false);
+}
+
 // Status
+
+$("#changestatus_button").click(function(){
+    $("#closestatusmodal_button").prop("disabled", false);
+    $("#closestatustopmodal_button").prop("disabled", false);
+    $("#changestatusmodal_button").prop("disabled", false);
+
+   $("#statusModalBody").html(lastStatusModalContent);
+});
+
+$("#changestatusmodal_button").click(function(){
+    $("#closestatusmodal_button").prop("disabled", true);
+    $("#closestatustopmodal_button").prop("disabled", true);
+    $("#changestatusmodal_button").prop("disabled", true);
+
+    let status = new Status(null, $("#status_content_modal").val(), null);
+    Responsive.placeSpinner("statusModalBody", "Saving");
+
+    status.set(Core.getCookie("token"), sucessChangeStatus, errorChangeStatus);
+});
+
+$(document).keypress(()=>{
+    $("#wordsleftstatusmodal_small").html((128-$("#status_content_modal").val().length) + " left");
+})
 
 function sucessChangeStatus()
 {
@@ -190,6 +209,40 @@ function errorChangeStatus()
 }
 
 // New user
+$("#createuser_button").click(()=>{
+    Responsive.clearAlert("newusermodal_error");
+    $("#closenewusermodal_button").prop("disabled", false);
+    $("#closenewusertopmodal_button").prop("disabled", false);
+    $("#createnewusermodal_button").prop("disabled", false);
+
+    $("#newUserModalBody").html(lastNewUserModalContent);
+})
+
+$("#createnewusermodal_button").click(()=>{
+    if(validateInputs())
+    {
+        $("#closenewusermodal_button").prop("disabled", true);
+        $("#closenewusertopmodal_button").prop("disabled", true);
+        $("#createnewusermodal_button").prop("disabled", true);
+        
+        var user = new User();
+        user.firstname = $("#firstnamemodal").val();
+        user.lastname = $("#lastnamemodal").val();
+        user.email = $("#emailmodal").val();
+        user.position = $("#positionmodal").val();
+        let password = $("#passwordmodal").val()
+        console.log(user);
+
+        lastNewUserModalSubmitted = Responsive.placeSpinner("newUserModalBody", "Creating");
+        user.create(Core.getCookie("token"), password, newUserSucess, newUserError);
+    }
+});
+
+$("#newuser_form").keypress(()=>{
+    Responsive.clearAlert("newusermodal_error");
+    clearErrorInputs();
+})
+
 function validateInputs()
 {
     let $inputs = $('#newuser_form :input');
@@ -224,7 +277,7 @@ function clearErrorInputs()
 function newUserSucess(data)
 {
     $('#newusermodal').modal('hide');
-    mainUser.get(Core.getCookie("token"), null, displayUsers, displayError)
+    loadUsers();
 }
 
 function newUserError(data)
@@ -243,4 +296,10 @@ function newUserError(data)
 function clearContent()
 {
     $("#content").html("");
+}
+
+function loadUsers()
+{
+    clearContent();
+    mainUser.get(Core.getCookie("token"), null, displayUsers, displayError);
 }
