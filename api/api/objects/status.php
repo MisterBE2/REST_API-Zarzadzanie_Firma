@@ -43,5 +43,28 @@
             
             return false;
         }
+
+        function get()
+        {
+            // Check if status already exist
+            $query = "SELECT status, updated, user_id FROM ".$this->table_name." WHERE user_id = :user_id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam("user_id", $this->user_id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            if($stmt->rowCount() > 0)
+            {   
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                extract($result);
+
+                $this->status = $status;
+                $this->updated = $updated;
+
+                return $result;
+            }
+
+            return false;
+        }
     }
 ?>

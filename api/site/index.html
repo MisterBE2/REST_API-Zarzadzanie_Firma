@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html lang="pl">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        
+        <title>Login to The System</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="res/api/core.js"></script>
+        <script src="res/api/message.js"></script>
+        <script src="res/api/user.js"></script>
+        <script src="res/login.js"></script>
+        <script src="res/home.js"></script>
+
+    </head>
+    <body onload="checkLogged()" class="bg-light text-dark">
+            <div class="row">
+                <div class="col" id="allerts"></div>
+                <div class="col"></div>
+            </div>
+            <div class="row justify-content-md-center mb-2 mt-2">
+                <div class="col"></div>
+                <h3 class="col-md-auto" style="text-align: center">Login to The System</h3>
+                <div class="col"></div>
+            </div>
+            
+
+            <div class="row">
+                <div class="col"></div>
+                <form class="border rounded mx-4 p-3 col-md-4 align-self-center bg-white shadow-sm">
+                    <div class="form-group">
+                        <label name="email">Emial</label>
+                        <input class="form-control" type="text" name="email" id="email">
+                    </div>
+                    <div class="form-group">
+                        <label name="password">Password</label>
+                        <input class="form-control" type="password" name="login()" id="password">
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="login()">Sign in</button>
+                </form>
+                <div class="col"></div>
+            </div>
+        </main>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>   
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    </body>
+</html>

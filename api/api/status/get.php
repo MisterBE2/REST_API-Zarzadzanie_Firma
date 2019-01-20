@@ -3,16 +3,15 @@
 
     include_once '../config/database.php';
     include_once '../objects/user.php';
-    include_once '../objects/message.php';
+    include_once '../objects/status.php';
     include_once '../shared/responses.php';
     
     $database = new Database();
     $db = $database->getConnection();
 
-    $message = new Message($db);
-    $userFrom = new User($db);
-    $userTo = new User($db);
-    
+    $status = new Status($db);
+    $user = new User($db);
+
     $data = json_decode(file_get_contents("php://input"));
 
     if($data === NULL)
@@ -23,7 +22,7 @@
                 ""
             ));
     }
-    else if(count((array)$data) == 3)
+    else if(count((array)$data) == 1)
     {
         $result = Util::isEmptyArray($data);
 
@@ -34,46 +33,35 @@
     }
     else
         Response::res401(new ResponseBody("Invalid input.", ""));
+    
 
     $decoded = Util::getJWT($data->body);
     
     if($decoded)
     {
-        $userFrom->email = $decoded->data->email;
-        if(!$userFrom->emailExists())
+        $user->email = $decoded->data->email;
+        if(!$user->emailExists())
         {
             Response::res400(
                 new ResponseBody(
-                    "UserFrom does not exist.", 
+                    "User does not exist.", 
                     ""
                 ));
         }
+    
+        $status->user_id = $decoded->data->id;
 
-        $userTo->email = $data->email;
-        if(!$userTo->emailExists())
-        {
-            Response::res400(
-                new ResponseBody(
-                    "UserTo does not exist.", 
-                    ""
-                ));
-        }
-
-        $message->message = $data->message;
-        $message->to_user_id = $userTo->id;
-        $message->from_user_id = $userFrom->id;
-
-        if($message->send()){
+        if($result = $status->get()){
             Response::res200(
                 new ResponseBody(
-                    "Message sended", 
-                    ""
+                    "Status retrived", 
+                    $result
                 ));
         }
         else{
             Response::res400(
                 new ResponseBody(
-                    "Unable to send message", 
+                    "Unable to retrive Status", 
                     ""
                 ));
         }

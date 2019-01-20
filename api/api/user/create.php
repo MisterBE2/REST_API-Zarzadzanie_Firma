@@ -16,7 +16,6 @@
     // get posted data
     $data = json_decode(file_get_contents("php://input"));
     
-    // make sure data exist
     if($data === NULL)
     {
         Response::res401(
@@ -25,37 +24,83 @@
                 ""
             ));
     }
-    
-    // set user property values
-    $user->firstname = $data->firstname;
-    $user->lastname = $data->lastname;
-    $user->email = $data->email;
-    $user->password = $data->password;
-    $user->position = $data->position;
-    $user->permission = 1;
-    
-    if($user->emailExists())
+    else if(count((array)$data) == 6)
     {
-        Response::res400(
-            new ResponseBody(
-                "User with that email already exists.", 
-                ""
-            ));
+        $result = Util::isEmptyArray($data);
+
+        if(count((array)$result) > 0)
+        {
+            Response::res401(new ResponseBody("Invalid input.", $result));
+        }
     }
-    // create the user
-    if($user->create()){
-        Response::res200(
-            new ResponseBody(
-                "User was created.", 
-                ""
-            ));
-    }
+    else
+        Response::res401(new ResponseBody("Invalid input.", ""));
     
-    // message if unable to create user
-    else{
-        Response::res400(
+    $decoded = Util::getJWT($data->body);
+
+    if($decoded)
+    {
+        $user->email = $decoded->data->email;
+        if(!$user->emailExists() || $email == "")
+        {
+            Response::res400(
+                new ResponseBody(
+                    "User does not exist.", 
+                    ""
+                ));
+        }
+
+        if($decoded->data->permission >= 1)
+        {
+            if($decoded->data->email != $user->email)
+            {
+                Response::res400(
+                    new ResponseBody(
+                        "Insufficient permission.", 
+                        ""
+                    ));
+            }
+        }
+
+        // set user property values
+        $user->firstname = $data->firstname;
+        $user->lastname = $data->lastname;
+        $user->email = $data->email;
+        $user->password = $data->password;
+        $user->position = $data->position;
+        $user->permission = 1;
+        
+        if($user->emailExists())
+        {
+            Response::res400(
+                new ResponseBody(
+                    "User with that email already exists.", 
+                    ""
+                ));
+        }
+        // create the user
+        if($user->create()){
+            Response::res200(
+                new ResponseBody(
+                    "User was created.", 
+                    ""
+                ));
+        }
+        
+        // message if unable to create user
+        else{
+            Response::res400(
+                new ResponseBody(
+                    "Unable to create user.", 
+                    ""
+                ));
+        }
+    }
+    else
+    {
+        Response::res401(
             new ResponseBody(
-                "Unable to create user.", 
+                "Invalid token.", 
                 ""
             ));
     }

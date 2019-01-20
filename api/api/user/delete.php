@@ -16,79 +16,72 @@
     // get posted data
     $data = json_decode(file_get_contents("php://input"));
     
-    // make sure data exist
     if($data === NULL)
     {
-        // set response code
-        http_response_code(412); //Precondition Failed
-    
-        // display message: unable to create user
-        echo json_encode(array("message" => "No input given."));
-        exit();
-    }
-
-    // get jwt
-    $jwt=isset($data->jwt) ? $data->jwt : "";
-    $email=isset($data->email) ? $data->email : "";
-
-    $user->email = $email;
-
-    if(!$user->emailExists() || $email == "")
-    {
-        Response::res400(
+        Response::res401(
             new ResponseBody(
-                "User does not exist.", 
+                "No input present.", 
                 ""
             ));
     }
+    else if(count((array)$data) == 2)
+    {
+        $result = Util::isEmptyArray($data);
 
-    // if jwt is not empty
-    if($jwt){
-
-        $decoded = Util::getJWT($jwt);
-
-        if($decoded)
+        if(count((array)$result) > 0)
         {
-            if($decoded->data->permission >= 1)
-            {
-                if($decoded->data->email != $user->email)
-                {
-                    Response::res400(
-                        new ResponseBody(
-                            "Insufficient permission.", 
-                            ""
-                        ));
-                }
-            }
+            Response::res401(new ResponseBody("Invalid input.", $result));
+        }
+    }
+    else
+        Response::res401(new ResponseBody("Invalid input.", ""));
 
-             // delete the user
-            if($user->delete()){
-                Response::res200(
-                    new ResponseBody(
-                        "User deleted.", 
-                        ""
-                    ));
-            }
-            
-            // message if unable to create user
-            else{
+    $decoded = Util::getJWT($data->body);
+
+    if($decoded)
+    {
+        $user->email = $decoded->data->email;
+        if(!$user->emailExists() || $email == "")
+        {
+            Response::res400(
+                new ResponseBody(
+                    "User does not exist.", 
+                    ""
+                ));
+        }
+
+        if($decoded->data->permission >= 1)
+        {
+            if($decoded->data->email != $user->email)
+            {
                 Response::res400(
                     new ResponseBody(
-                        "Unable to delete user.", 
+                        "Insufficient permission.", 
                         ""
                     ));
             }
         }
-        else
-        {
-            Response::res401(
+
+            // delete the user
+        if($user->delete()){
+            Response::res200(
                 new ResponseBody(
-                    "Invalid token.", 
+                    "User deleted.", 
+                    ""
+                ));
+        }
+        
+        // message if unable to create user
+        else{
+            Response::res400(
+                new ResponseBody(
+                    "Unable to delete user.", 
                     ""
                 ));
         }
     }
-    else{
+    else
+    {
         Response::res401(
             new ResponseBody(
                 "Invalid token.", 

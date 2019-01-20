@@ -128,6 +128,9 @@
                 $this->password = $row['password'];
                 $this->permission = $row['permission'];
                 $this->position = $row['position'];
+                $this->created = $row['created'];
+                $this->updated = $row['updated'];
+                $this->status = $row['status'];
         
                 return true;
             }
@@ -135,17 +138,103 @@
             return false;
         }
 
+        function get($email)
+        {
+            if(!Util::isEmpty($email))
+            {
+                $user = new User($this->conn);
+                $user->email = $email;
+                if($user->emailExists())
+                {
+                    return array(
+                        "id" => $user->id,
+                        "firstname" => $user->firstname,
+                        "lastname" => $user->lastname,
+                        "email" => $user->email,
+                        "permission" => $user->permission,
+                        "position" => $user->position,
+                        "created" => $user->created,
+                        "updated" => $user->updated,
+                        "status" => $user->status
+                    );
+                }
+                else
+                {
+                    Response::res400(
+                        new ResponseBody(
+                            "Target user does not exist.", 
+                            ""
+                        ));
+                }
+            }
+            else
+            {
+                $query = "SELECT * FROM " . $this->table_name . " ORDER BY lastname DESC";
+                $stmt = $this->conn->prepare( $query );
+                $stmt->execute();
+    
+                if($stmt->rowCount()>0){
+                    
+                    $users = array();
+                    $tempStatus = new Status($this->conn);
+                        
+                    while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+                    {
+                        extract($row);
+
+                        $tempStatus->user_id = $id;
+                        $tempStatus->get();
+
+                        if($id != $this->id)
+                        {
+                            $user = array(
+                                "id" => $id,
+                                "firstname" => $firstname,
+                                "lastname" => $lastname,
+                                "email" => $email,
+                                "permission" => $permission,
+                                "position" => $position,
+                                "created" => $created,
+                                "updated" => $updated,
+                                "status" => $tempStatus->status
+                            );
+    
+                            array_push($users, $user);
+                        }
+                    }
+
+                    return $users;
+                }
+                else
+                {
+                    Response::res400(
+                        new ResponseBody(
+                            "Target user does not exist.", 
+                            ""
+                        ));
+                }
+            }
+        }
+
         // check if given email exist in the database
         function emailExists(){
+
+            $tempStatus = new Status($this->conn);
         
             // query to check if email exists
-            $query = "SELECT u.id, u.firstname, u.lastname, u.password, u.position, u.permission, s.status
+            $query = "SELECT u.id, u.firstname, u.lastname, u.password, u.position, u.permission, u.created, u.updated, s.status
                     FROM " . $this->table_name . " as u
-                        LEFT JOIN ".$this->status->table_name." as s 
+                        LEFT JOIN ".$tempStatus->table_name." as s 
                             on s.user_id = u.id 
                     WHERE email = ?
                     LIMIT 0,1";
-        
+
+            // // query to check if email exists
+            // $query = "SELECT id, firstname, lastname, password, position, permission, created, updated
+            // FROM " . $this->table_name . "
+            // WHERE email = ?
+            // LIMIT 0,1";
+            
             // prepare the query
             $stmt = $this->conn->prepare( $query );
         
@@ -174,7 +263,9 @@
                 $this->password = $row['password'];
                 $this->permission = $row['permission'];
                 $this->position = $row['position'];
-                $this->status->status = $row['status'];
+                $this->created = $row['created'];
+                $this->updated = $row['updated'];
+                $this->status = $row['status'];
 
                 // return true because email exists in the database
                 return true;

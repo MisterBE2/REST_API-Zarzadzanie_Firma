@@ -26,12 +26,17 @@
          */
         public static function isEmpty($data)
         {
-            if(!isset($data)) return true;
-            if($data === NULL) return true;
-            if(!empty($data)) return true;
-
-            $data = trim($data);
-            if($data == '') return true;
+            if(isset($data))
+            {
+                if($data === null)
+                    return true;
+                else if(!is_numeric($data))
+                {
+                    if($data === "") return true;
+                }
+            }
+            else
+                return true;
 
             return false;
         }
@@ -43,9 +48,11 @@
         {
             $result = array();
             foreach ($data as $key => $value) {
-                if(isEmpty($value))
+                if(Util::isEmpty($value))
                     array_push($result, $key);
             }
+
+            return $result;
         }
 
         // public static function encodeJWT($firstName, $secondName, $id, $email, $position, $premission)
@@ -101,7 +108,9 @@
                     "email" => $user->email,
                     "position" => $user->position,
                     "permission" => $user->permission,
-                    "status" =>  $user->status->status
+                    "status" =>  $user->status->status,
+                    "created" =>  $user->created,
+                    "updated" =>  $user->updated
                 )
                 );
 

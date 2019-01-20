@@ -1,20 +1,21 @@
 <?php
     include_once '../shared/standard_headers.php';
 
+    // files needed to connect to database
     include_once '../config/database.php';
     include_once '../objects/user.php';
-    include_once '../objects/message.php';
     include_once '../shared/responses.php';
     
+    // get database connection
     $database = new Database();
     $db = $database->getConnection();
 
-    $message = new Message($db);
-    $userFrom = new User($db);
-    $userTo = new User($db);
+    // instantiate user object
+    $user = new User($db);
     
+    // get posted data
     $data = json_decode(file_get_contents("php://input"));
-
+    
     if($data === NULL)
     {
         Response::res401(
@@ -23,7 +24,7 @@
                 ""
             ));
     }
-    else if(count((array)$data) == 3)
+    else if(count((array)$data) >= 1)
     {
         $result = Util::isEmptyArray($data);
 
@@ -34,56 +35,45 @@
     }
     else
         Response::res401(new ResponseBody("Invalid input.", ""));
-
-    $decoded = Util::getJWT($data->body);
     
+    $decoded = Util::getJWT($data->body);
+
     if($decoded)
     {
-        $userFrom->email = $decoded->data->email;
-        if(!$userFrom->emailExists())
+        $user->email = $decoded->data->email;
+        if(!$user->emailExists())
         {
             Response::res400(
                 new ResponseBody(
-                    "UserFrom does not exist.", 
+                    "User does not exist.", 
                     ""
                 ));
         }
 
-        $userTo->email = $data->email;
-        if(!$userTo->emailExists())
-        {
-            Response::res400(
-                new ResponseBody(
-                    "UserTo does not exist.", 
-                    ""
-                ));
-        }
 
-        $message->message = $data->message;
-        $message->to_user_id = $userTo->id;
-        $message->from_user_id = $userFrom->id;
-
-        if($message->send()){
+        $email = isset($data->email) ? $data->email : "";
+        if($result = $user->get($email)){
             Response::res200(
                 new ResponseBody(
-                    "Message sended", 
-                    ""
+                    "User(s) retrived.", 
+                    $result
                 ));
         }
+        
         else{
             Response::res400(
                 new ResponseBody(
-                    "Unable to send message", 
+                    "Unable to retrive user.", 
                     ""
                 ));
         }
-    }   
+    }
     else
     {
-        Response::res500(
+        Response::res401(
             new ResponseBody(
-                "Token could not be decoded.", 
+                "Invalid token.", 
                 ""
-            )); 
+            ));
     }
 ?>

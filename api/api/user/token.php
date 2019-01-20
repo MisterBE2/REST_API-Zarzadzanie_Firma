@@ -17,7 +17,26 @@
     // get posted data
     $data = json_decode(file_get_contents("php://input"));
     
-    // set product property values
+    if($data === NULL)
+    {
+        Response::res401(
+            new ResponseBody(
+                "No input present.", 
+                ""
+            ));
+    }
+    else if(count((array)$data) == 2)
+    {
+        $result = Util::isEmptyArray($data);
+
+        if(count((array)$result) > 0)
+        {
+            Response::res401(new ResponseBody("Invalid input.", $result));
+        }
+    }
+    else
+        Response::res401(new ResponseBody("Invalid input.", ""));
+
     $user->email = $data->email;
     $email_exists = $user->emailExists();
 
