@@ -42,8 +42,6 @@ function checkLoggedSucess(data)
         $('#allerts').after(message);
         Core.sendToHome();
     }
-    else
-        Core.sendToHome();
 }
 
 function checkLoggedError(data)
