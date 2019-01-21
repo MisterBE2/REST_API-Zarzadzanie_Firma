@@ -48,7 +48,7 @@ function checkLoggedSucess(data)
 
 function checkLoggedError(data)
 {
-    Console.log("checkLoggedError");
+    console.log("checkLoggedError");
     Core.deleteCookie("token");
     if(Core.getCurrentFile() == homeFile)
     {
