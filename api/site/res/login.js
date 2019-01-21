@@ -34,7 +34,7 @@ function checkLogged()
 function checkLoggedSucess(data)
 {
     //Core.updateCooke("token", 1);
-    Console.log("checkLoggedSucess");
+    //console.log("checkLoggedSucess");
     if(Core.getCurrentFile() != homeFile)
     {
         let message = "<div id='alert' class='alert alert-success col-md-5 align-self-center' role='alert'>Signing in.</div>";
