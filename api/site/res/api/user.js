@@ -1,6 +1,6 @@
 class User
 {
-    constructor(id, firstname, lastname, email, position, created, updated, permission, status)
+    constructor(id, firstname, lastname, email, position, created, updated, permission, status, newemail)
     {
         this.id = id;
         this.firstname = firstname;
@@ -11,6 +11,7 @@ class User
         this.updated = updated;
         this.permission = permission;
         this.status = status;
+        this.newemail = newemail;
     }
 
     getToken(password, sucess, error)
@@ -59,7 +60,7 @@ class User
                     userRef.position = temp["position"];
                     userRef.created = temp["created"];
                     userRef.updated = temp["updated"];
-                    userRef.permission = temp["permission"];
+                    userRef.permission = parseInt(temp["permission"]);
                     userRef.status = temp["status"];
                 }
 
@@ -95,6 +96,36 @@ class User
             },
             error: function (xhr, status) {
                 //console.log(xhr.responseText);
+                error(xhr.responseText);
+            }
+        })
+    }
+
+    update(token, password, sucess, error)
+    {
+        let data = {
+            "email" : this.email,
+            "body" : token,
+            "firstname" : this.firstname,
+            "lastname" : this.lastname,
+            "position" : this.position,
+            "password" : password,
+            "newemail" : this.newemail
+        }
+
+        //console.log(data);
+
+        $.ajax({
+            method: "POST", 
+            dataType: "json",
+            url: "../../api/api/user/update.php",
+            data: JSON.stringify(data),
+            success: function (data) {
+                //(data);
+                sucess(data);
+            },
+            error: function (xhr, status) {
+                //(xhr.responseText);
                 error(xhr.responseText);
             }
         })
@@ -162,7 +193,7 @@ class User
                         e["position"],
                         e["created"],
                         e["updated"],
-                        e["permission"],
+                        parseInt(e["permission"]),
                         e["status"]
                     );
 

@@ -20,7 +20,7 @@
         public $position;
         public $created;
         public $updated;
-        public $oldemail;
+        public $newemail;
         public $status;
 
         // constructor
@@ -331,11 +331,17 @@
             $this->lastname=Util::clear($this->lastname);
             $this->email=Util::clear($this->email);
             $this->position=Util::clear($this->position);
+            $this->newemail=Util::clear($this->newemail);
         
             // bind the values from the form
             $stmt->bindParam(':firstname', $this->firstname);
             $stmt->bindParam(':lastname', $this->lastname);
-            $stmt->bindParam(':email', $this->email);
+
+            if(Util::isEmpty($this->newemail))
+                $stmt->bindParam(':email', $this->email);
+            else
+                $stmt->bindParam(':email', $this->newemail);
+           
             $stmt->bindParam(':position', $this->position);
             $stmt->bindParam(':permission', $this->permission, PDO::PARAM_INT);
         
@@ -351,6 +357,7 @@
         
             // execute the query
             if($stmt->execute()){
+                $this->email = $this->newemail;
                 return true;
             }
         

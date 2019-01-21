@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         
-        <title>Login to The System</title>
+        <title>The System</title>
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
         
@@ -44,7 +44,7 @@
                         <a class="nav-link" id="home" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="settings" href="#">Settings</a>
+                        <a class="nav-link" id="messages" href="#">Messages</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="signout" href="#">Sign out</a>
@@ -89,8 +89,9 @@
                                 <li class="list-group-item">Joined: <span id="created_badge" class="font-weight-bold"></span></li>
                         </ul>
                     </div>
-                    <button type="button" class="btn btn-light w-100 mb-3" id="changestatus_button" data-toggle="modal" data-target="#statusModal">Change status</button>
-                    <button type="button" class="btn btn-light w-100 mb-3" id="createuser_button" data-toggle="modal" data-target="#newusermodal">Create user</button>
+                    <button type="button" class="btn btn-dark w-100 mb-3" id="settings_button" data-toggle="modal" data-target="#newusermodal">Account settings</button>
+                    <button type="button" class="btn btn-dark w-100 mb-3" id="changestatus_button" data-toggle="modal" data-target="#statusModal">Change status</button>
+                    <button type="button" class="btn btn-success w-100 mb-3" id="createuser_button" data-toggle="modal" data-target="#newusermodal">Create user</button>
                 </div>
 
                 <div class="col pt-4" style="overflow-y: auto" id="content">

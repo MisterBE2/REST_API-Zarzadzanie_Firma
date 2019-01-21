@@ -9,12 +9,19 @@ let mainUser = new User();
 let loadedUsers;
 let selectedUser;
 
+let currentNewUserModalStatus;
+let newUserModalValues = {
+    new_user : 0,
+    edit_user : 1,
+    edit_self : 2
+}
+
 //Buttons
 $("#home").click(()=>{
 
 });
 
-$("#settings").click(()=>{
+$("#messages").click(()=>{
 
 });
 
@@ -26,7 +33,7 @@ $("#signout").click(function(){
 
 //User
 $(document).ready(()=>{
-    mainUser.validate(Core.getCookie("token"), initialiseUser, displayError, mainUser);
+    loadSelf();
     loadUsers();
 });
 
@@ -34,13 +41,15 @@ function initialiseUser(data)
 {
     data = data["body"];
     
+    //console.log(data);
+
     $("#firstname_badge").html(data["firstname"]);
     $("#lastname_badge").html(data["lastname"]);
     $("#email_badge").html(data["email"]);
     $("#position_badge").html(data["position"]);
     $("#created_badge").html(data["created"]);
 
-    if(data["permission"] == 0)
+    if(parseInt(data["permission"]) == 0)
     {
         $("#createuser_button").show();
         $("#admin_badge").show();
@@ -55,6 +64,12 @@ function initialiseUser(data)
 
     let status = new Status();
     status.get(Core.getCookie("token"), updateStatus, displayError)
+}
+
+function initialiseUserError()
+{
+    Core.deleteCookie("token");
+    Core.sendToIndex();
 }
 
 function updateStatus(data)
@@ -97,6 +112,7 @@ function addCoworker(firstname, lastname, position, status, email)
 
     if(mainUser.permission == 0)
     {
+        body += '<a href="#" class="badge badge-success ml-1 text-white" data-toggle="modal" data-target="#newusermodal" onclick="editUser(\''+email+'\')">Edit</a>'
         body += '<a href="#" class="badge badge-danger ml-1 text-white" data-toggle="modal" data-target="#deleteusermodal" onclick="deleteUser(\''+email+'\')">Delete</a>'
     }
 
@@ -112,7 +128,7 @@ function privateMessage(email)
 
 function displayUsers(users)
 {   
-    console.log(users);
+    //console.log(users);
     clearContent();
     loadedUsers = users;
     users.forEach(user => {
@@ -143,9 +159,7 @@ function deleteUser(email)
 
     $("#deleteUserMainBody").html(lastDeleteUserModalContent);
 
-    selectedUser = loadedUsers.filter(obj => {
-        return obj.email == email
-    })
+    selectedUser = getFromLoadedUsers(email);
 
     selectedUser = selectedUser[0];
 
@@ -210,13 +224,19 @@ function errorChangeStatus()
 
 // New user
 $("#createuser_button").click(()=>{
+    currentNewUserModalStatus = newUserModalValues.new_user;
+
+    $("#newusermodal_label").html("New User");
+    $("#createnewusermodal_button").html("Save");
+
     Responsive.clearAlert("newusermodal_error");
     $("#closenewusermodal_button").prop("disabled", false);
     $("#closenewusertopmodal_button").prop("disabled", false);
     $("#createnewusermodal_button").prop("disabled", false);
+    $("#positionmodal").prop("disabled", false);
 
     $("#newUserModalBody").html(lastNewUserModalContent);
-})
+});
 
 $("#createnewusermodal_button").click(()=>{
     if(validateInputs())
@@ -224,24 +244,48 @@ $("#createnewusermodal_button").click(()=>{
         $("#closenewusermodal_button").prop("disabled", true);
         $("#closenewusertopmodal_button").prop("disabled", true);
         $("#createnewusermodal_button").prop("disabled", true);
-        
+
         var user = new User();
         user.firstname = $("#firstnamemodal").val();
         user.lastname = $("#lastnamemodal").val();
-        user.email = $("#emailmodal").val();
         user.position = $("#positionmodal").val();
         let password = $("#passwordmodal").val()
-        console.log(user);
+        //console.log(user);
 
-        lastNewUserModalSubmitted = Responsive.placeSpinner("newUserModalBody", "Creating");
-        user.create(Core.getCookie("token"), password, newUserSucess, newUserError);
+        switch (currentNewUserModalStatus) {
+            case newUserModalValues.new_user:
+                user.email = $("#emailmodal").val();
+                user.create(Core.getCookie("token"), password, newUserSucess, newUserError);
+                lastNewUserModalSubmitted = Responsive.placeSpinner("newUserModalBody", "Creating");
+                break;
+
+            case newUserModalValues.edit_user:
+                if(user.email != $("#emailmodal").val())
+                    user.newemail = $("#emailmodal").val();
+            
+                user.email = selectedUser.email;
+            
+                user.update(Core.getCookie("token"), password, updateUserSucess, updateUserError);
+                lastNewUserModalSubmitted = Responsive.placeSpinner("newUserModalBody", "Updating");
+                break;
+
+            case newUserModalValues.edit_self:
+                if(user.email != $("#emailmodal").val())
+                    user.newemail = $("#emailmodal").val();
+
+                user.email = mainUser.email;
+                
+                user.update(Core.getCookie("token"), password, updateUserSelfSucess, updateUserSelfError);
+                lastNewUserModalSubmitted = Responsive.placeSpinner("newUserModalBody", "Updating");
+                break;
+        }
     }
 });
 
 $("#newuser_form").keypress(()=>{
     Responsive.clearAlert("newusermodal_error");
     clearErrorInputs();
-})
+});
 
 function validateInputs()
 {
@@ -282,6 +326,7 @@ function newUserSucess(data)
 
 function newUserError(data)
 {
+    $("#newUserModalBody").html(lastNewUserModalContent);
     $("#closenewusermodal_button").prop("disabled", false);
     $("#closenewusertopmodal_button").prop("disabled", false);
     $("#createnewusermodal_button").prop("disabled", false);
@@ -290,6 +335,97 @@ function newUserError(data)
     //console.log(data);
     Responsive.putAlertAfter("newusermodal_error", data["message"]);
 }
+
+// Account settings
+$("#settings_button").click(()=>{
+
+    $("#newUserModalBody").html(lastNewUserModalContent);
+    currentNewUserModalStatus = newUserModalValues.edit_self;
+
+    $("#closenewusermodal_button").prop("disabled", false);
+    $("#closenewusertopmodal_button").prop("disabled", false);
+    $("#createnewusermodal_button").prop("disabled", false);
+    $("#positionmodal").prop("disabled", false);
+
+    $("#newusermodal_label").html("Account Settings");
+    $("#createnewusermodal_button").html("Update");
+
+    $("#firstnamemodal").val(mainUser.firstname);
+    $("#lastnamemodal").val(mainUser.lastname);
+    $("#emailmodal").val(mainUser.email);
+    $("#positionmodal").val(mainUser.position);
+
+    if(mainUser.permission > 0)
+    {
+        $("#positionmodal").prop("disabled", true);
+        $("#emailmodal").prop("disabled", true);
+    }
+    lastNewUserModalContent = $("#newUserModalBody").html();
+});
+
+function updateUserSelfSucess(data)
+{
+    Core.setCookie("token", data["body"], 1);
+    loadSelf();
+    $('#newusermodal').modal('hide');
+}
+
+function updateUserSelfError()
+{
+    $("#newUserModalBody").html(lastNewUserModalContent);
+    Core.deleteCookie("token");
+    Core.sendToIndex();
+}
+
+// edit user
+
+function editUser(email)
+{
+    currentNewUserModalStatus = newUserModalValues.edit_user;
+    $("#newUserModalBody").html(lastNewUserModalContent);
+
+    $("#closenewusermodal_button").prop("disabled", false);
+    $("#closenewusertopmodal_button").prop("disabled", false);
+    $("#createnewusermodal_button").prop("disabled", false);
+    $("#positionmodal").prop("disabled", false);
+
+    $("#newusermodal_label").html("User Settings");
+    $("#createnewusermodal_button").html("Update");
+
+    let user = getFromLoadedUsers(email);
+    selectedUser = user;
+
+    $("#firstnamemodal").val(user.firstname);
+    $("#lastnamemodal").val(user.lastname);
+    $("#emailmodal").val(user.email);
+    $("#positionmodal").val(user.position);
+
+    if(mainUser.permission > 0)
+    {
+        $("#positionmodal").prop("disabled", true);
+        $("#emailmodal").prop("disabled", true);
+    }
+
+    lastNewUserModalContent = $("#newUserModalBody").html();
+}
+
+function updateUserSucess(data)
+{
+    loadUsers();
+    selectedUser = null;
+    $('#newusermodal').modal('hide');
+}
+
+function updateUserError()
+{
+    $("#closestatusmodal_button").prop("disabled", false);
+    $("#closestatustopmodal_button").prop("disabled", false);
+    $("#changestatusmodal_button").prop("disabled", false);
+
+    data = JSON.parse(data);
+    Responsive.putAlert("newuser_form", "<span class='font-weight-bold'>Updateing failed!</span><br><span>Server response: " + data["message"]+"</span>");
+}
+
 
 // content
 
@@ -302,4 +438,16 @@ function loadUsers()
 {
     clearContent();
     mainUser.get(Core.getCookie("token"), null, displayUsers, displayError);
+}
+
+function loadSelf()
+{
+    mainUser.validate(Core.getCookie("token"), initialiseUser, initialiseUserError, mainUser);
+}
+
+function getFromLoadedUsers(email)
+{
+    return loadedUsers.filter(obj => {
+        return obj.email == email
+    })[0];
 }

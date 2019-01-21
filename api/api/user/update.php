@@ -12,11 +12,12 @@
     $db = $database->getConnection();
 
     // instantiate user object
+    $sender = new User($db);
     $user = new User($db);
     
     // get posted data
     $data = json_decode(file_get_contents("php://input"));
-    
+
     if($data === NULL)
     {
         Response::res401(
@@ -25,7 +26,7 @@
                 ""
             ));
     }
-    else if(count((array)$data) == 5)
+    else if(count((array)$data) == 7)
     {
         $result = Util::isEmptyArray($data);
 
@@ -41,8 +42,26 @@
 
     if($decoded)
     {
-        $user->email = $decoded->data->email;
-        if(!$user->emailExists() || $user->email == '')
+        $sender->email = $decoded->data->email;
+        if(!$sender->emailExists())
+        {
+            Response::res400(
+                new ResponseBody(
+                    "Sender does not exist.", 
+                    ""
+                ));
+        }
+        else if($decoded->data->permission >= 1)
+        {
+            Response::res400(
+                new ResponseBody(
+                    "Insufficient permission.", 
+                    ""
+                ));
+        }
+
+        $user->email = $data->email;
+        if(!$user->emailExists())
         {
             Response::res400(
                 new ResponseBody(
@@ -56,7 +75,7 @@
         $user->lastname = $data->lastname;
         $user->password = $data->password;
         $user->position = $data->position;
-        $user->permission = 1;
+        $user->newemail = $data->newemail;
 
         // delete the user
         if($user->update()){

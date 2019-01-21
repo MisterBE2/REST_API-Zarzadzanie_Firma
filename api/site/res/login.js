@@ -34,7 +34,7 @@ function checkLogged()
 function checkLoggedSucess(data)
 {
     //Core.updateCooke("token", 1);
-    
+    Console.log("checkLoggedSucess");
     if(Core.getCurrentFile() != homeFile)
     {
         let message = "<div id='alert' class='alert alert-success col-md-5 align-self-center' role='alert'>Signing in.</div>";
@@ -42,13 +42,17 @@ function checkLoggedSucess(data)
         $('#allerts').after(message);
         Core.sendToHome();
     }
+    else
+        Core.sendToHome();
 }
 
 function checkLoggedError(data)
 {
+    Console.log("checkLoggedError");
+    Core.deleteCookie("token");
     if(Core.getCurrentFile() == homeFile)
     {
-        Core.sendToIndex()
+        Core.sendToIndex();
     }
 
     //clearInterval(checkLoggedInterval);
