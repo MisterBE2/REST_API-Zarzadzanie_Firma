@@ -200,7 +200,7 @@
             }
             else
             {
-                $query = "SELECT * FROM " . $this->table_name . " ORDER BY lastname DESC";
+                $query = "SELECT * FROM " . $this->table_name . " ORDER BY lastname ASC";
                 $stmt = $this->conn->prepare( $query );
                 $stmt->execute();
     

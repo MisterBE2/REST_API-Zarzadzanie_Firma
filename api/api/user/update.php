@@ -32,7 +32,8 @@
 
         if(count((array)$result) > 0)
         {
-            Response::res401(new ResponseBody("Invalid input.", $result));
+            if(!in_array("password", $result))
+                Response::res401(new ResponseBody("Invalid input.", $result));
         }
     }
     else
@@ -53,11 +54,14 @@
         }
         else if($decoded->data->permission >= 1)
         {
-            Response::res400(
-                new ResponseBody(
-                    "Insufficient permission.", 
-                    ""
-                ));
+            if($decoded->data->email != $data->email)
+            {
+                Response::res400(
+                    new ResponseBody(
+                        "Insufficient permission.", 
+                        ""
+                    ));
+            }
         }
 
         $user->email = $data->email;
@@ -70,12 +74,26 @@
                 ));
         }
 
+        if($user->email != $data->newemail)
+        {
+            $user->email = $data->newemail;
+            if($user->emailExists())
+            {
+                Response::res400(
+                    new ResponseBody(
+                        "User already exist.", 
+                        ""
+                    ));
+            }
+        }
+
         // Update all values, because emailExist() populates them with old ones
         $user->firstname = $data->firstname;
         $user->lastname = $data->lastname;
         $user->password = $data->password;
         $user->position = $data->position;
         $user->newemail = $data->newemail;
+        $user->email = $data->email;
 
         // delete the user
         if($user->update()){

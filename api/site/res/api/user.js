@@ -11,7 +11,7 @@ class User
         this.updated = updated;
         this.permission = permission;
         this.status = status;
-        this.newemail = newemail;
+        this.newemail = newemail == null ? "" : newemail;
     }
 
     getToken(password, sucess, error)
@@ -121,11 +121,11 @@ class User
             url: "../../api/api/user/update.php",
             data: JSON.stringify(data),
             success: function (data) {
-                //(data);
+                //console.log(data);
                 sucess(data);
             },
             error: function (xhr, status) {
-                //(xhr.responseText);
+               // console.log(xhr.responseText);
                 error(xhr.responseText);
             }
         })

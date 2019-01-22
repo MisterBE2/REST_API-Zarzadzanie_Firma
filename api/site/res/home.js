@@ -16,6 +16,21 @@ let newUserModalValues = {
     edit_self : 2
 }
 
+let toastPlacement = {
+    left : 0,
+    right : 1
+}
+
+let userType = {
+    receiver : 0,
+    sender : 1
+}
+
+let isChangeStatusModalOpen = false;
+let updateInterval = setInterval(updateGlobal, 10000);
+
+let currentMessagedUser;
+
 //Buttons
 $("#home").click(()=>{
 
@@ -30,6 +45,45 @@ $("#signout").click(function(){
     checkLogged();
 });
 
+$(document).keypress((e)=>{
+
+    if(($("#newusermodal").data('bs.modal') || {})._isShown)
+    {
+        Responsive.clearAlert("newusermodal_error");
+        clearErrorInputs();
+
+        if(e.keyCode == 13)
+        {
+            sendNewUserModal();
+        }
+    }
+    else if(($("#statusModal").data('bs.modal') || {})._isShown )
+    {
+        if(e.keyCode == 13)
+        {
+            changeStatusAction();
+        }
+
+        $("#wordsleftstatusmodal_small").html((128-$("#status_content_modal").val().length) + " left");
+    }
+    else if(($("#pmmodal").data('bs.modal') || {})._isShown )
+    {
+        if(e.keyCode == 13)
+        {
+            sendMessageModal();
+        }
+    }
+});
+
+function updateGlobal()
+{
+    if(($("#pmmodal").data('bs.modal') || {})._isShown && currentMessagedUser != null)
+    {
+        let message = new Message();
+        message.user_to = currentMessagedUser.email;
+        message.get(Core.getCookie("token"), 0, loadMessagesSucess, loadMessagesError);
+    }
+}
 
 //User
 $(document).ready(()=>{
@@ -92,10 +146,15 @@ function displayError(data)
 }
 
 // Co-workers
-function addCoworker(firstname, lastname, position, status, email)
+function addCoworker(firstname, lastname, position, status, email, permission)
 {
     let body = '<div class="border bg-white m-2 p-3 rounded" style="width: 20em; display: inline-block;">';
-    body += '<h5 class="border-bottom">'+firstname+' '+lastname+'</h5>';
+    body += '<p class="border-bottom"><span class="font-weight-bold mr-2">'+firstname+' '+lastname+'</span>';
+    
+    if(permission == 0)
+        body+= '<span class="badge badge-success text-white">ADM</span>';
+    
+    body += '</p>';
     body += '    Postition: ' + position;
 
     if(status === null || status == "" || status.length == 0)
@@ -108,7 +167,7 @@ function addCoworker(firstname, lastname, position, status, email)
         body += '    Status: ' + status;
     }
     body += '   <br>';
-    body += '    <a href="#" class="badge badge-primary text-white" onclick="privateMessage(\''+email+'\')">PM</a>';
+    body += '    <a href="#" class="badge badge-primary text-white" data-target="#pmmodal" data-toggle="modal" onclick="privateMessage(\''+email+'\')">PM</a>';
 
     if(mainUser.permission == 0)
     {
@@ -121,10 +180,6 @@ function addCoworker(firstname, lastname, position, status, email)
     $("#content").append(body);
 }
 
-function privateMessage(email)
-{
-
-}
 
 function displayUsers(users)
 {   
@@ -132,7 +187,7 @@ function displayUsers(users)
     clearContent();
     loadedUsers = users;
     users.forEach(user => {
-        addCoworker(user.firstname, user.lastname, user.position, user.status, user.email);
+        addCoworker(user.firstname, user.lastname, user.position, user.status, user.email, user.permission);
     });
 }
 
@@ -161,8 +216,6 @@ function deleteUser(email)
 
     selectedUser = getFromLoadedUsers(email);
 
-    selectedUser = selectedUser[0];
-
     $("#userToDelete").html(selectedUser.firstname + " " + selectedUser.lastname);
 }
 
@@ -188,6 +241,9 @@ function deleteError(data)
 // Status
 
 $("#changestatus_button").click(function(){
+
+    isChangeStatusModalOpen = true;
+
     $("#closestatusmodal_button").prop("disabled", false);
     $("#closestatustopmodal_button").prop("disabled", false);
     $("#changestatusmodal_button").prop("disabled", false);
@@ -195,7 +251,8 @@ $("#changestatus_button").click(function(){
    $("#statusModalBody").html(lastStatusModalContent);
 });
 
-$("#changestatusmodal_button").click(function(){
+function changeStatusAction()
+{
     $("#closestatusmodal_button").prop("disabled", true);
     $("#closestatustopmodal_button").prop("disabled", true);
     $("#changestatusmodal_button").prop("disabled", true);
@@ -204,14 +261,15 @@ $("#changestatusmodal_button").click(function(){
     Responsive.placeSpinner("statusModalBody", "Saving");
 
     status.set(Core.getCookie("token"), sucessChangeStatus, errorChangeStatus);
-});
+}
 
-$(document).keypress(()=>{
-    $("#wordsleftstatusmodal_small").html((128-$("#status_content_modal").val().length) + " left");
-})
+$("#changestatusmodal_button").click(function(){
+    changeStatusAction();
+});
 
 function sucessChangeStatus()
 {
+    isChangeStatusModalOpen = false;
     let status = new Status();
     status.get(Core.getCookie("token"), updateStatus, displayError)
     $('#statusModal').modal('hide');
@@ -219,6 +277,7 @@ function sucessChangeStatus()
 
 function errorChangeStatus()
 {
+    isChangeStatusModalOpen = false;
     $('#statusModal').modal('hide');
 }
 
@@ -226,65 +285,92 @@ function errorChangeStatus()
 $("#createuser_button").click(()=>{
     currentNewUserModalStatus = newUserModalValues.new_user;
 
-    $("#newusermodal_label").html("New User");
-    $("#createnewusermodal_button").html("Save");
+    setNewUserHeaderText("New User");
+    setNewUserActionButtonText("Save");
+    setNewUserControl(true);
 
     Responsive.clearAlert("newusermodal_error");
-    $("#closenewusermodal_button").prop("disabled", false);
-    $("#closenewusertopmodal_button").prop("disabled", false);
-    $("#createnewusermodal_button").prop("disabled", false);
-    $("#positionmodal").prop("disabled", false);
 
     $("#newUserModalBody").html(lastNewUserModalContent);
 });
 
-$("#createnewusermodal_button").click(()=>{
+function setNewUserHeaderText(text)
+{
+    $("#newusermodal_label").html(text);
+}
+
+function setNewUserActionButtonText(text)
+{
+    $("#createnewusermodal_button").html(text);
+}
+
+function setNewUserControl(isEnabled)
+{   
+    isEnabled = !isEnabled;
+    $("#closenewusermodal_button").prop("disabled", isEnabled);
+    $("#closenewusertopmodal_button").prop("disabled", isEnabled);
+    $("#createnewusermodal_button").prop("disabled", isEnabled);
+    $("#positionmodal").prop("disabled", isEnabled);
+
+}
+
+function populateNewUserModal(user)
+{
+    $("#firstnamemodal").val(user.firstname);
+    $("#lastnamemodal").val(user.lastname);
+    $("#emailmodal").val(user.email);
+    $("#positionmodal").val(user.position);
+
+}
+
+function getNewUserModal()
+{
+    var user = new User();
+    user.firstname = $("#firstnamemodal").val();
+    user.lastname = $("#lastnamemodal").val();
+    user.position = $("#positionmodal").val();
+    user.email = $("#emailmodal").val();
+
+    return user;
+}
+
+function sendNewUserModal()
+{
     if(validateInputs())
     {
-        $("#closenewusermodal_button").prop("disabled", true);
-        $("#closenewusertopmodal_button").prop("disabled", true);
-        $("#createnewusermodal_button").prop("disabled", true);
+        setNewUserControl(false);
 
-        var user = new User();
-        user.firstname = $("#firstnamemodal").val();
-        user.lastname = $("#lastnamemodal").val();
-        user.position = $("#positionmodal").val();
-        let password = $("#passwordmodal").val()
+        let user = getNewUserModal();
+        let password = $("#passwordmodal").val();
         //console.log(user);
 
         switch (currentNewUserModalStatus) {
             case newUserModalValues.new_user:
-                user.email = $("#emailmodal").val();
                 user.create(Core.getCookie("token"), password, newUserSucess, newUserError);
                 lastNewUserModalSubmitted = Responsive.placeSpinner("newUserModalBody", "Creating");
                 break;
 
             case newUserModalValues.edit_user:
-                if(user.email != $("#emailmodal").val())
-                    user.newemail = $("#emailmodal").val();
-            
                 user.email = selectedUser.email;
+                user.newemail = $('#emailmodal').val();
             
                 user.update(Core.getCookie("token"), password, updateUserSucess, updateUserError);
                 lastNewUserModalSubmitted = Responsive.placeSpinner("newUserModalBody", "Updating");
                 break;
 
             case newUserModalValues.edit_self:
-                if(user.email != $("#emailmodal").val())
-                    user.newemail = $("#emailmodal").val();
-
                 user.email = mainUser.email;
+                user.newemail = $('#emailmodal').val();
                 
                 user.update(Core.getCookie("token"), password, updateUserSelfSucess, updateUserSelfError);
                 lastNewUserModalSubmitted = Responsive.placeSpinner("newUserModalBody", "Updating");
                 break;
         }
     }
-});
+}
 
-$("#newuser_form").keypress(()=>{
-    Responsive.clearAlert("newusermodal_error");
-    clearErrorInputs();
+$("#createnewusermodal_button").click(()=>{
+    sendNewUserModal();
 });
 
 function validateInputs()
@@ -293,7 +379,16 @@ function validateInputs()
     let valid = true;
 
     $inputs.each(function() {
-        if($(this).val().length == 0)
+        if(currentNewUserModalStatus == newUserModalValues.new_user)
+        {
+            if($(this).val().length == 0)
+            {
+                Responsive.redInputField($(this).attr('id'), "This field can not be empty");
+                if(valid)
+                    valid = false;
+            }
+        }
+        else if($(this).val().length == 0 && $(this).prop("id") != "passwordmodal")
         {
             Responsive.redInputField($(this).attr('id'), "This field can not be empty");
             if(valid)
@@ -311,7 +406,6 @@ function validateInputs()
 function clearErrorInputs()
 {
     let $inputs = $('#newuser_form :input');
-    let valid = true;
 
     $inputs.each(function() {
         Responsive.clearInputField($(this).attr('id'));
@@ -320,16 +414,14 @@ function clearErrorInputs()
 
 function newUserSucess(data)
 {
-    $('#newusermodal').modal('hide');
+    currentNewUserModalStatus = null;
     loadUsers();
+    $('#newusermodal').modal('hide');
 }
 
 function newUserError(data)
 {
-    $("#newUserModalBody").html(lastNewUserModalContent);
-    $("#closenewusermodal_button").prop("disabled", false);
-    $("#closenewusertopmodal_button").prop("disabled", false);
-    $("#createnewusermodal_button").prop("disabled", false);
+    setNewUserControl(false);
     $("#newUserModalBody").html(lastNewUserModalSubmitted);
     data = JSON.parse(data);
     //console.log(data);
@@ -342,39 +434,35 @@ $("#settings_button").click(()=>{
     $("#newUserModalBody").html(lastNewUserModalContent);
     currentNewUserModalStatus = newUserModalValues.edit_self;
 
-    $("#closenewusermodal_button").prop("disabled", false);
-    $("#closenewusertopmodal_button").prop("disabled", false);
-    $("#createnewusermodal_button").prop("disabled", false);
-    $("#positionmodal").prop("disabled", false);
+    setNewUserControl(true);
+    setNewUserHeaderText("Account Settings");
+    setNewUserActionButtonText("Update");
 
-    $("#newusermodal_label").html("Account Settings");
-    $("#createnewusermodal_button").html("Update");
-
-    $("#firstnamemodal").val(mainUser.firstname);
-    $("#lastnamemodal").val(mainUser.lastname);
-    $("#emailmodal").val(mainUser.email);
-    $("#positionmodal").val(mainUser.position);
+    populateNewUserModal(mainUser);
 
     if(mainUser.permission > 0)
     {
         $("#positionmodal").prop("disabled", true);
         $("#emailmodal").prop("disabled", true);
     }
+
     lastNewUserModalContent = $("#newUserModalBody").html();
 });
 
 function updateUserSelfSucess(data)
 {
+    currentNewUserModalStatus = null;
     Core.setCookie("token", data["body"], 1);
     loadSelf();
     $('#newusermodal').modal('hide');
 }
 
-function updateUserSelfError()
+function updateUserSelfError(data)
 {
+    setNewUserControl(true);
+    data = JSON.parse(data);
     $("#newUserModalBody").html(lastNewUserModalContent);
-    Core.deleteCookie("token");
-    Core.sendToIndex();
+    Responsive.putAlert("newusermodal_error", "<span class='font-weight-bold'>Updating failed!</span><br><span>Server response: " + data["message"]+" "+JSON.stringify(data["body"])+"</span>");
 }
 
 // edit user
@@ -384,21 +472,14 @@ function editUser(email)
     currentNewUserModalStatus = newUserModalValues.edit_user;
     $("#newUserModalBody").html(lastNewUserModalContent);
 
-    $("#closenewusermodal_button").prop("disabled", false);
-    $("#closenewusertopmodal_button").prop("disabled", false);
-    $("#createnewusermodal_button").prop("disabled", false);
-    $("#positionmodal").prop("disabled", false);
-
-    $("#newusermodal_label").html("User Settings");
-    $("#createnewusermodal_button").html("Update");
+    setNewUserControl(true);
+    setNewUserHeaderText("User Settings");
+    setNewUserActionButtonText("Update");
 
     let user = getFromLoadedUsers(email);
     selectedUser = user;
 
-    $("#firstnamemodal").val(user.firstname);
-    $("#lastnamemodal").val(user.lastname);
-    $("#emailmodal").val(user.email);
-    $("#positionmodal").val(user.position);
+    populateNewUserModal(user);
 
     if(mainUser.permission > 0)
     {
@@ -411,21 +492,108 @@ function editUser(email)
 
 function updateUserSucess(data)
 {
+    currentNewUserModalStatus = null;
     loadUsers();
     selectedUser = null;
     $('#newusermodal').modal('hide');
 }
 
-function updateUserError()
+function updateUserError(data)
 {
-    $("#closestatusmodal_button").prop("disabled", false);
-    $("#closestatustopmodal_button").prop("disabled", false);
-    $("#changestatusmodal_button").prop("disabled", false);
-
+    setNewUserControl(true);
     data = JSON.parse(data);
-    Responsive.putAlert("newuser_form", "<span class='font-weight-bold'>Updateing failed!</span><br><span>Server response: " + data["message"]+"</span>");
+    $("#newUserModalBody").html(lastNewUserModalContent);
+    Responsive.putAlert("newusermodal_error", "<span class='font-weight-bold'>Updating failed!</span><br><span>Server response: " + data["message"]+" "+JSON.stringify(data["body"])+"</span>");
 }
 
+// PM
+
+function addToast(message, user, _userType, time, placement, elementId)
+{
+    let body = '<div role="alert" '+(placement == toastPlacement.right ? 'style="margin-left: auto;' : '')+'aria-live="assertive" aria-atomic="true" class="toast '+(_userType == userType.sender ? 'border border-primary' : '')+'" data-autohide="false"><div class="toast-header"><img src="res/img/user_icon.svg" class="rounded mr-2" alt=""><strong class="mr-auto">'+user+'</strong><small>'+time+'</small></div><div class="toast-body">'+message+'</div></div>';
+
+    $("#"+elementId).append(body);
+    $('.toast').toast("show");
+}
+
+function privateMessage(email)
+{
+    $("#usernamepmmodal").html(email);
+
+    currentMessagedUser = getFromLoadedUsers(email);
+
+    let message = new Message();
+    message.user_to = email;
+
+    message.get(Core.getCookie("token"), 0, loadMessagesSucess, loadMessagesError);
+}
+
+function loadMessagesSucess(data)
+{
+    $("#pmmodal_mainbody").html("");
+
+    data.forEach(e => {
+        let utype;
+        let side;
+
+        if(mainUser.email == e.user_from)
+            utype = userType.sender;
+        
+        if(utype == userType.sender)
+            side = toastPlacement.right;
+    
+        addToast(e.message, e.user_from, utype, e.sended, side, "pmmodal_mainbody");
+    });
+
+    scrollBottomMessages();
+}
+
+function scrollBottomMessages()
+{
+    var element = document.getElementById("pmmodal_mainbody");
+    element.scrollTop = element.scrollHeight;
+}
+
+function loadMessagesError(data)
+{
+    console.log(data);
+}
+
+$("#pmmodalsend_button").click(()=>{
+    sendMessageModal();
+});
+
+function sendMessageModal()
+{
+    if($("#messagemodal_input").val().length > 0)
+    {
+        let message = new Message();
+        message.user_to = currentMessagedUser.email;
+        message.user_from = mainUser.email;
+        message.message = $("#messagemodal_input").val();
+    
+        message.send(Core.getCookie("token"), sendMessageSucess, sendMessageError);
+        $("#messagemodal_input").val("");
+    }
+}
+
+function sendMessageSucess(data)
+{
+    let message = new Message();
+    message.user_to = currentMessagedUser.email;
+
+    message.get(Core.getCookie("token"), 0, loadMessagesSucess, loadMessagesError);
+}
+
+function sendMessageError(data)
+{
+    console.log(data);
+}
+
+$("#pmmodal").on('hidden.bs.modal', ()=>{
+    currentMessagedUser = false;
+    $("#pmmodal_mainbody").html("");
+});
 
 // content
 
@@ -451,3 +619,12 @@ function getFromLoadedUsers(email)
         return obj.email == email
     })[0];
 }
+
+(function($) {
+    $.fn.goTo = function() {
+        $('html, body').animate({
+            scrollTop: $(this).offset().top + 'px'
+        }, 'fast');
+        return this; // for chaining...
+    }
+})(jQuery);

@@ -43,13 +43,8 @@
                     <li class="nav-item active">
                         <a class="nav-link" id="home" href="#">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="messages" href="#">Messages</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="signout" href="#">Sign out</a>
-                    </li>
                 </ul>
+                <button type="button" class="btn btn-primary" id="signout">Sign out</button>
             </div>
         </nav>
 
@@ -172,7 +167,7 @@
         </div>
 
         <!-- delete user Modal -->
-        <div class="modal fade" id="deleteusermodal" tabindex="-1" role="dialog" aria-labelledby="newusermodal_label" aria-hidden="true">
+        <div class="modal fade" id="deleteusermodal" tabindex="-1" role="dialog" aria-labelledby="deleteusermodal_label" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -187,6 +182,30 @@
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal" id="deleteusermodalclose_button">Close</button>
                   <button type="button" class="btn btn-danger" id="deleteusermodal_button">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+
+          <!-- PM Modal -->
+          <div class="modal fade" id="pmmodal" tabindex="-1" role="dialog" aria-labelledby="pmmodal_label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Messages with user <span id="usernamepmmodal" class="font-weight-bold"></span></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body" style="height: 500px; overflow-y: auto" id="pmmodal_mainbody">
+                        
+                </div>
+                <div class="modal-footer">
+                    <div class="input-group">
+                        <input type="text" class="form-control mr-2" placeholder="message" aria-label="message" aria-describedby="message" id="messagemodal_input">
+                    </div>
+                    <button type="button" class="btn btn-primary" id="pmmodalsend_button">Send</button>
                 </div>
               </div>
             </div>

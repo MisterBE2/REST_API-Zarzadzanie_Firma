@@ -55,3 +55,11 @@ function checkLoggedError(data)
 
     //clearInterval(checkLoggedInterval);
 }
+
+if(Core.getCurrentFile() == loginFile)
+{
+    $(document).keypress((e)=>{
+        if(e.keyCode == 13)
+            login();
+    });
+}

@@ -69,12 +69,14 @@
                 "userFrom"=>array(
                     "firstName" => $userFrom->firstname,
                     "lastName" => $userFrom->lastname, 
-                    "id" => $userFrom->id  
+                    "id" => $userFrom->id,
+                    "email" => $userFrom->email
                 ),
                 "userTo"=>array(
                     "firstName" => $userTo->firstname,
                     "lastName" => $userTo->lastname,
-                    "id" => $userTo->id   
+                    "id" => $userTo->id,
+                    "email" => $userTo->email  
                 ),
                 "messages" => $result
             );
