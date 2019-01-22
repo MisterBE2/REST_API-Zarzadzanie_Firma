@@ -47,7 +47,7 @@ class Message
         //console.log(data);
 
         $.ajax({
-            method: "POST", 
+            method: "GET", 
             dataType: "json",
             url: "../../api/api/message/get.php",
             data: JSON.stringify(data),

@@ -24,7 +24,7 @@ class User
         //console.log(data);
 
         $.ajax({
-            method: "POST", 
+            method: "GET", 
             dataType: "json",
             url: "../../api/api/user/token.php",
             data: JSON.stringify(data),
@@ -44,7 +44,7 @@ class User
         }
 
         $.ajax({
-            method: "POST", 
+            method: "GET", 
             dataType: "json",
             url: "../../api/api/user/validate.php",
             data: JSON.stringify(data),
@@ -116,7 +116,7 @@ class User
         //console.log(data);
 
         $.ajax({
-            method: "POST", 
+            method: "PATCH", 
             dataType: "json",
             url: "../../api/api/user/update.php",
             data: JSON.stringify(data),
@@ -141,7 +141,7 @@ class User
         //console.log(data);
 
         $.ajax({
-            method: "POST", 
+            method: "DELETE", 
             dataType: "json",
             url: "../../api/api/user/delete.php",
             data: JSON.stringify(data),
@@ -175,7 +175,7 @@ class User
         };
 
         $.ajax({
-            method: "POST", 
+            method: "GET", 
             dataType: "json",
             url: "../../api/api/user/get.php",
             data: JSON.stringify(data),

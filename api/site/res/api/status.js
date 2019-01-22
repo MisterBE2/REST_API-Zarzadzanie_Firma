@@ -14,7 +14,7 @@ class Status
         }
 
         $.ajax({
-            method: "POST", 
+            method: "GET", 
             dataType: "json",
             url: "../../api/api/status/get.php",
             data: JSON.stringify(data),
