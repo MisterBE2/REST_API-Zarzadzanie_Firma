@@ -50,7 +50,7 @@ class Message
             method: "GET", 
             dataType: "json",
             url: "../../api/api/message/get.php",
-            data: JSON.stringify(data),
+            data: data,
             success: function (data) {
                 data = data["body"];
 

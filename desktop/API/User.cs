@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RestSharp;
 
 namespace API
 {
@@ -33,6 +34,7 @@ namespace API
             this.status = status;
             this.newemail = newemail;
         }
+
         public User(string id, string firstname, string lastname, string email, string position, string created, string updated, int permission, string status, string newemail)
         {
             this.firstname = firstname;
@@ -54,6 +56,21 @@ namespace API
                 this.updated = tmpDate;
 
             this.status = new Status(status, null, null);      
+        }
+
+        public string getToken(string password)
+        {
+            var client = new RestClient(Core.siteMap.userDir[SiteMap.userMethod.token]);
+
+            var request = new RestRequest();
+            request.RequestFormat = DataFormat.Json;
+            request.Method = Method.GET;
+            request.AddParameter("email", this.email);
+            request.AddParameter("password", password);
+
+            var response = client.Execute(request);
+
+            return response.Content;
         }
     }
 }

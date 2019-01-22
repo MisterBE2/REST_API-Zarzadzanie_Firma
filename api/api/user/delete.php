@@ -16,6 +16,13 @@
     
     // get posted data
     $data = json_decode(file_get_contents("php://input"));
+
+    // var_dump($_GET);
+    // echo('\n');
+    // var_dump($_POST);
+    // echo('\n');
+    // var_dump(file_get_contents("php://input"));
+    // exit();
     
     if($data === NULL)
     {

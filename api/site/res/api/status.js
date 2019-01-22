@@ -14,10 +14,10 @@ class Status
         }
 
         $.ajax({
-            method: "GET", 
+            method: "GET",
             dataType: "json",
             url: "../../api/api/status/get.php",
-            data: JSON.stringify(data),
+            data: data,
             success: function (data) {
                 this.status = data["body"]["status"];
                 this.updated = data["body"]["updated"];

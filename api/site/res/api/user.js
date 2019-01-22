@@ -16,18 +16,18 @@ class User
 
     getToken(password, sucess, error)
     {
-        let data = {
+        let _data = {
             "email" : this.email,
             "password" : password
         }
 
-        //console.log(data);
+        console.log(_data);
 
         $.ajax({
             method: "GET", 
             dataType: "json",
             url: "../../api/api/user/token.php",
-            data: JSON.stringify(data),
+            data: _data,
             success: function (data) {
                 sucess(data);
             },
@@ -39,15 +39,11 @@ class User
 
     validate(token, sucess, error, userRef)
     {
-        let data = {
-            "body" : token,
-        }
-
         $.ajax({
             method: "GET", 
             dataType: "json",
             url: "../../api/api/user/validate.php",
-            data: JSON.stringify(data),
+            data: {"body" : token},
             success: function (data) {
                 if(userRef != null)
                 {
@@ -146,11 +142,11 @@ class User
             url: "../../api/api/user/delete.php",
             data: JSON.stringify(data),
             success: function (data) {
-                //console.log(data);
+                console.log(data);
                 sucess(data);
             },
             error: function (xhr, status) {
-                //console.log(xhr.responseText);
+                console.log(xhr.responseText);
                 error(xhr.responseText);
             }
         })
@@ -178,7 +174,7 @@ class User
             method: "GET", 
             dataType: "json",
             url: "../../api/api/user/get.php",
-            data: JSON.stringify(data),
+            data: data,
             success: function (data) {
 
                 data = data["body"];

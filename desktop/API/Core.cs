@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace API
 {
-    public class Core
+    public static class Core
     {
-        public SiteMap siteMap = new SiteMap();
-        public User mainUser = new User();
+        public static SiteMap siteMap = new SiteMap();
+        public static User mainUser = new User();
     }
 }

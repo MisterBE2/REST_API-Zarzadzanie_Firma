@@ -6,7 +6,7 @@
     include_once '../shared/responses.php';
     
     // get posted data
-    $data = json_decode(file_get_contents("php://input"));
+    $data = json_decode(json_encode($_GET));
     
     // get jwt
     $jwt=isset($data->body) ? $data->body : "";
@@ -17,7 +17,7 @@
         $decoded = Util::getJWT($jwt);
         $valid = Util::validateJWT($decoded);
 
-        if($decoded && $valid)
+        if($decoded && !$valid)
         {
             Response::res200(
                 new ResponseBody(

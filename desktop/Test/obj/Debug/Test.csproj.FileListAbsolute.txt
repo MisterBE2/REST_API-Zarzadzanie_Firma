@@ -1,0 +1,12 @@
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\Test\bin\Debug\Test.exe.config
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\Test\bin\Debug\Test.exe
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\Test\bin\Debug\Test.pdb
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\Test\bin\Debug\API.dll
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\Test\bin\Debug\RestSharp.dll
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\Test\bin\Debug\API.pdb
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\Test\bin\Debug\RestSharp.xml
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\Test\obj\Debug\Test.csprojAssemblyReference.cache
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\Test\obj\Debug\Test.csproj.CoreCompileInputs.cache
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\Test\obj\Debug\Test.csproj.CopyComplete
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\Test\obj\Debug\Test.exe
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\Test\obj\Debug\Test.pdb

@@ -16,8 +16,15 @@
     $user = new User($db);
     
     // get posted data
-    $data = json_decode(file_get_contents("php://input"));
+    $data = $_GET;
+
+    //var_dump($data->email);
     
+    // var_dump($_GET);
+    // var_dump($_POST);
+    // var_dump(file_get_contents("php://input"));
+    // exit();
+
     if($data === NULL)
     {
         Response::res401(
@@ -38,7 +45,7 @@
     else
         Response::res401(new ResponseBody("Invalid input.", ""));
 
-    $user->email = $data->email;
+    $user->email = $data["email"];
     $email_exists = $user->emailExists();
 
     if(!$email_exists)
@@ -51,7 +58,7 @@
     }
     
     // check if email exists and if password is correct
-    if($email_exists && password_verify($data->password, $user->password)){
+    if($email_exists && password_verify($data["password"], $user->password)){
 
         $jwt = Util::encodeJWTFromUser($user);
 

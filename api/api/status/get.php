@@ -13,7 +13,12 @@
     $status = new Status($db);
     $user = new User($db);
 
-    $data = json_decode(file_get_contents("php://input"));
+    // var_dump($_GET);
+    // var_dump($_POST);
+    // var_dump(file_get_contents("php://input"));
+    // exit();
+
+    $data = json_decode(json_encode($_GET));
 
     if($data === NULL)
     {

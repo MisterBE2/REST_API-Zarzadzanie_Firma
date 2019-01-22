@@ -15,7 +15,7 @@
     $user = new User($db);
     
     // get posted data
-    $data = json_decode(file_get_contents("php://input"));
+    $data = json_decode(json_encode($_GET));
     
     if($data === NULL)
     {

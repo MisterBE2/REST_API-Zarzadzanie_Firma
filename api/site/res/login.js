@@ -12,7 +12,7 @@ function loginSucess(data)
     $('#allerts').after(message);
     Core.setCookie("token", data["body"], 1);
     checkLoggedInterval = window.setInterval(checkLogged, 10000);
-    Core.sendToHome();
+    //Core.sendToHome();
 }
 
 function loginError(data)
@@ -47,6 +47,7 @@ function checkLoggedSucess(data)
 function checkLoggedError(data)
 {
     console.log("checkLoggedError");
+    console.log(data);
     Core.deleteCookie("token");
     if(Core.getCurrentFile() == homeFile)
     {
