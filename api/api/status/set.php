@@ -1,5 +1,6 @@
 <?php
     include_once '../shared/standard_headers.php';
+    header("Access-Control-Allow-Methods: POST");
     
     // files needed to connect to database
     include_once '../config/database.php';

@@ -1,5 +1,7 @@
 <?php
     include_once '../shared/standard_headers.php';
+    header("Access-Control-Allow-Methods: GET");
+
     include_once '../shared/utilities.php';
     include_once '../shared/responses.php';
     
@@ -13,8 +15,9 @@
     if($jwt){
 
         $decoded = Util::getJWT($jwt);
+        $valid = Util::validateJWT($decoded);
 
-        if($decoded)
+        if($decoded && $valid)
         {
             Response::res200(
                 new ResponseBody(

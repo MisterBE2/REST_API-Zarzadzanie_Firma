@@ -1,0 +1,15 @@
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheFirm\bin\Debug\TheFirm.exe.config
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheFirm\bin\Debug\TheFirm.exe
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheFirm\bin\Debug\TheFirm.pdb
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheFirm\obj\Debug\TheFirm.csprojAssemblyReference.cache
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheFirm\obj\Debug\MainWindow.g.cs
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheFirm\obj\Debug\App.g.cs
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheFirm\obj\Debug\TheFirm_MarkupCompile.cache
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheFirm\obj\Debug\TheFirm_MarkupCompile.lref
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheFirm\obj\Debug\MainWindow.baml
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheFirm\obj\Debug\TheFirm.g.resources
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheFirm\obj\Debug\TheFirm.Properties.Resources.resources
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheFirm\obj\Debug\TheFirm.csproj.GenerateResource.cache
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheFirm\obj\Debug\TheFirm.csproj.CoreCompileInputs.cache
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheFirm\obj\Debug\TheFirm.exe
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheFirm\obj\Debug\TheFirm.pdb

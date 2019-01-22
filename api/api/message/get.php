@@ -1,5 +1,6 @@
 <?php
     include_once '../shared/standard_headers.php';
+    header("Access-Control-Allow-Methods: GET");
 
     include_once '../config/database.php';
     include_once '../objects/user.php';

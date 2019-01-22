@@ -1,6 +1,8 @@
 <?php
     include_once "../config/core.php";
     include_once 'responses.php';
+    include_once '../config/database.php';
+
     include_once '../libs/php-jwt-master/src/BeforeValidException.php';
     include_once '../libs/php-jwt-master/src/ExpiredException.php';
     include_once '../libs/php-jwt-master/src/SignatureInvalidException.php';
@@ -117,15 +119,31 @@
                 return JWT::encode($token, $api_key);
         }
 
-        public static function validateJWTKeys($decodedJWT)
+        public static function validateJWT($data)
         {
             global $iss;
             global $iat;
             global $nbf;
 
-            if($decodedJWT["iss"] = $iss) return false;
-            // if($decodedJWT["iat"] = $iat) return false;
-            // if($decodedJWT["nbf"] = $nbf) return false;
+            if($data->iss = $iss) return false;
+
+            $user = $data->data;
+
+            $database = new Database();
+            $db = $database->getConnection();
+        
+            $userTrusted = new User($db);
+            $userTrusted->email = $user->email;
+
+            if(!$userTrusted->userExist()) return false;
+            if(
+                $userTrusted->id != $user->id ||
+                $userTrusted->firstname != $user->firstname ||
+                $userTrusted->lastname != $user->lastname ||
+                $userTrusted->position != $user->position ||
+                $userTrusted->permission != $user->permission ||
+                $userTrusted->created != $user->created
+            ) return false;
 
             return true;
         }
