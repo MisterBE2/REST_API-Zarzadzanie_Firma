@@ -10,29 +10,29 @@ namespace API
     {
         public string root = "http://localhost/php/Projekty/EiT/Programowanie%20Aplikacyjne/Projekt%202/REST_API-Zarzadzanie_Firma/api/api/";
 
-        public enum userMethod {token, validate, create, update, delete, get};
-        public Dictionary<userMethod, string> userDir = new Dictionary<userMethod, string>();
+        public enum UserMethod {token, validate, create, update, delete, get};
+        public Dictionary<UserMethod, string> userDir = new Dictionary<UserMethod, string>();
 
-        public enum messageMethod {send, get};
-        public Dictionary<messageMethod, string> messageDir = new Dictionary<messageMethod, string>();
+        public enum MessageMethod {send, get};
+        public Dictionary<MessageMethod, string> messageDir = new Dictionary<MessageMethod, string>();
 
-        public enum statusMethod { set, get };
-        public Dictionary<statusMethod, string> statusDir = new Dictionary<statusMethod, string>();
+        public enum StatusMethod { set, get };
+        public Dictionary<StatusMethod, string> statusDir = new Dictionary<StatusMethod, string>();
 
         public SiteMap()
         {
-            userDir.Add(userMethod.token, root+ "user/token.php");
-            userDir.Add(userMethod.validate, root + "user/validate.php");
-            userDir.Add(userMethod.create, root + "user/create.php");
-            userDir.Add(userMethod.update, root + "user/update.php");
-            userDir.Add(userMethod.delete, root + "user/delete.php");
-            userDir.Add(userMethod.get, root + "user/get.php");
+            userDir.Add(UserMethod.token, root+ "user/token.php");
+            userDir.Add(UserMethod.validate, root + "user/validate.php");
+            userDir.Add(UserMethod.create, root + "user/create.php");
+            userDir.Add(UserMethod.update, root + "user/update.php");
+            userDir.Add(UserMethod.delete, root + "user/delete.php");
+            userDir.Add(UserMethod.get, root + "user/get.php");
 
-            messageDir.Add(messageMethod.send, root + "message/send.php");
-            messageDir.Add(messageMethod.get, root + "message/get.php");
+            messageDir.Add(MessageMethod.send, root + "message/send.php");
+            messageDir.Add(MessageMethod.get, root + "message/get.php");
 
-            statusDir.Add(statusMethod.get, root+"status/get.php");
-            statusDir.Add(statusMethod.set, root+ "status/set.php");
+            statusDir.Add(StatusMethod.get, root+"status/get.php");
+            statusDir.Add(StatusMethod.set, root+ "status/set.php");
         }
     }
 }

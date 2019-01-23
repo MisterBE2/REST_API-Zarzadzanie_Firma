@@ -13,9 +13,17 @@
 
     // instantiate user object
     $user = new User($db);
-    
+
+    // var_dump($_GET);
+    // var_dump($_POST);
+    // var_dump(file_get_contents("php://input"));
+    // exit();
+
     // get posted data
-    $data = json_decode(file_get_contents("php://input"));
+    if(isset($_POST))
+        $data = json_decode(json_encode($_POST));
+    else
+        $data = json_decode(file_get_contents("php://input"));
     
     if($data === NULL)
     {

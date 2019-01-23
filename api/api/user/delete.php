@@ -15,12 +15,13 @@
     $user = new User($db);
     
     // get posted data
-    $data = json_decode(file_get_contents("php://input"));
+    if(isset($_GET))
+        $data = json_decode(json_encode($_GET));
+    else
+        $data = json_decode(file_get_contents("php://input"));
 
     // var_dump($_GET);
-    // echo('\n');
     // var_dump($_POST);
-    // echo('\n');
     // var_dump(file_get_contents("php://input"));
     // exit();
     

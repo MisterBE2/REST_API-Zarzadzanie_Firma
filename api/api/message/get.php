@@ -14,7 +14,10 @@
     $userFrom = new User($db);
     $userTo = new User($db);
     
+    if(isset($_GET))
     $data = json_decode(json_encode($_GET));
+        else
+    $data = json_decode(file_get_contents("php://input"));
 
     if($data === NULL)
     {

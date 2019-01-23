@@ -6,7 +6,10 @@
     include_once '../shared/responses.php';
     
     // get posted data
+    if(isset($_GET))
     $data = json_decode(json_encode($_GET));
+        else
+    $data = json_decode(file_get_contents("php://input"));
     
     // get jwt
     $jwt=isset($data->body) ? $data->body : "";
