@@ -14,7 +14,6 @@ D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\RE
 D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheSystem\obj\Debug\TheSystem.exe
 D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheSystem\obj\Debug\TheSystem.pdb
 D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheSystem\bin\Debug\API.dll
-D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheSystem\bin\Debug\Newtonsoft.Json.dll
 D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheSystem\bin\Debug\RestSharp.dll
 D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheSystem\bin\Debug\API.pdb
 D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheSystem\bin\Debug\Newtonsoft.Json.pdb
@@ -23,7 +22,6 @@ D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\RE
 D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheSystem\obj\Debug\Home.g.cs
 D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheSystem\obj\Debug\Home.baml
 D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheSystem\obj\Debug\TheSystem.csproj.CopyComplete
-D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheSystem\bin\Debug\WpfAnimatedGif.dll
 D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheSystem\bin\Debug\WpfAnimatedGif.xml
 D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheSystem\obj\Debug\UserControls\SpinnerControl.g.cs
 D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\TheSystem\obj\Debug\UserControls\StatusControl.g.cs
