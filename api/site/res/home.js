@@ -32,14 +32,6 @@ let updateInterval = setInterval(updateGlobal, 10000);
 let currentMessagedUser;
 
 //Buttons
-$("#home").click(()=>{
-
-});
-
-$("#messages").click(()=>{
-
-});
-
 $("#signout").click(function(){
     Core.deleteCookie("token");
     checkLogged();
@@ -117,7 +109,7 @@ function initialiseUser(data)
     //$("#status_content_badge").html(mainUser.status);
 
     let status = new Status();
-    status.get(Core.getCookie("token"), updateStatus, displayError)
+    status.get("", Core.getCookie("token"), updateStatus, displayError)
 }
 
 function initialiseUserError()
@@ -128,6 +120,7 @@ function initialiseUserError()
 
 function updateStatus(data)
 {
+    //console.log(data);
     if(data["body"]["status"] != null)
         $("#status_content_badge").html(data["body"]["status"]);
     else
@@ -271,7 +264,7 @@ function sucessChangeStatus()
 {
     isChangeStatusModalOpen = false;
     let status = new Status();
-    status.get(Core.getCookie("token"), updateStatus, displayError)
+    status.get("", Core.getCookie("token"), updateStatus, displayError)
     $('#statusModal').modal('hide');
 }
 

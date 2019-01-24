@@ -20,11 +20,12 @@
     // exit();
 
     // get posted data
-    if(isset($_POST))
+    if(count((array)$_POST) > 0)
         $data = json_decode(json_encode($_POST));
     else
         $data = json_decode(file_get_contents("php://input"));
-    
+
+
     if($data === NULL)
     {
         Response::res401(

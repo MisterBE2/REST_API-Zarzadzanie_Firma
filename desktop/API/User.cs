@@ -18,19 +18,19 @@ namespace API
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
         public int Permission { get; set; }
-        public Status Status { get; set; }
+        public string Status { get; set; }
         public string Newemail { get; set; }
         #endregion
         #region constructor
         public User() { }
-        public User(string id, string firstname, string lastname, string email, string position, string created, string updated, string permission, string status, string newemail)
+        public User(string id, string firstname, string lastname, string email, string position, string created, string updated, string permission, string newemail, string status)
         {
             Firstname = firstname;
             Lastname = lastname;
             Email = email;
             Position = position;
             Newemail = newemail;
-
+            Status = status;
 
             if (Int32.TryParse(id, out int tmpInt))
             {
@@ -51,10 +51,8 @@ namespace API
             {
                 Updated = tmpDate;
             }
-
-            Status = new Status(status, null, null);
         }
-        public User(int id, string firstname, string lastname, string email, string position, DateTime created, DateTime updated, int permission, Status status, string newemail)
+        public User(int id, string firstname, string lastname, string email, string position, DateTime created, DateTime updated, int permission, string newemail, string status)
         {
             Id = id;
             Firstname = firstname;
@@ -64,8 +62,8 @@ namespace API
             Created = created;
             Updated = updated;
             Permission = permission;
-            Status = status;
             Newemail = newemail;
+            Status = status;
         }
 
         #endregion
@@ -82,7 +80,7 @@ namespace API
                            (string)o["updated"],
                            (string)o["permission"],
                            "",
-                           ""
+                           (string)o["status"]
                        );
         }
         private User JsonToUser(JObject o)
@@ -97,7 +95,7 @@ namespace API
                            (string)o["updated"],
                            (string)o["permission"],
                            "",
-                           ""
+                           (string)o["status"]
                        );
         }
         #endregion
@@ -114,9 +112,13 @@ namespace API
             request.AddParameter("email", Email);
             request.AddParameter("password", password);
 
-            client.ExecuteAsync(request, response => { OnTokenResult(StandardEventArgsDeserialiser(response)); });
+            client.ExecuteAsync(request, response => {
+
+                StandardEventArgs args = StandardEventArgsDeserialiser(response);
+                OnTokenResult(args);
+            });
         }
-        public void Validate()
+        public void Validate(string token)
         {
             var client = new RestClient(Core.siteMap.userDir[SiteMap.UserMethod.validate]);
 
@@ -125,7 +127,8 @@ namespace API
                 RequestFormat = DataFormat.Json,
                 Method = Method.GET
             };
-            request.AddParameter("body", Main.Core.Token);
+
+            request.AddParameter("body", token.Length >0 ? token : token);
 
             client.ExecuteAsync(request, response =>
             {
@@ -137,6 +140,16 @@ namespace API
                     JObject o = JObject.Parse(response.Content);
                     args.Message = (string)o["message"];
                     args.User = JsonToUser(o["body"]);
+                    args.Body = token.Length > 0 ? token : token;
+
+                    Id = args.User.Id;
+                    Firstname = args.User.Firstname;
+                    Lastname = args.User.Lastname;
+                    Email = args.User.Email;
+                    Position = args.User.Position;
+                    Created = args.User.Created;
+                    Updated = args.User.Updated;
+                    Permission = args.User.Permission;
                 }
                 else
                 {
@@ -149,14 +162,14 @@ namespace API
                 OnValidateResult(args);
             });
         }
-        public void Get(string email)
+        public void Get(string email, string token)
         {
             var client = new RestClient(Core.siteMap.userDir[SiteMap.UserMethod.get]);
 
             var request = new RestRequest();
             request.RequestFormat = DataFormat.Json;
             request.Method = Method.GET;
-            request.AddParameter("body", Main.Core.Token);
+            request.AddParameter("body", token);
             if (email.Length > 0)
             {
                 request.AddParameter("email", email);
@@ -177,7 +190,8 @@ namespace API
 
                     foreach (JObject tempUser in tempUsers)
                     {
-                        args.Users.Add(JsonToUser(tempUser));
+                        //.WriteLine(JsonConvert.SerializeObject(tempUser, Formatting.Indented));
+                       args.Users.Add(JsonToUser(tempUser));
                     }
                 }
                 else
@@ -188,26 +202,17 @@ namespace API
                     args.Users = null;
                 }
 
-                if (email.Length > 0 && response.StatusCode == HttpStatusCode.OK)
-                {
-                    Main.Core.Users = args.Users;
-                }
-
                 OnGetResult(args);
             });
         }
-        public void Get()
-        {
-            Get("");
-        }
-        public void Delete()
+        public void Delete(string token)
         {
             var client = new RestClient(Core.siteMap.userDir[SiteMap.UserMethod.delete]);
 
             var request = new RestRequest();
             request.RequestFormat = DataFormat.Json;
             request.Method = Method.DELETE;
-            request.AddParameter("body", Main.Core.Token);
+            request.AddParameter("body", token);
             request.AddParameter("email", Email);
 
             client.ExecuteAsync(request, response =>
@@ -215,19 +220,19 @@ namespace API
                 OnDeleteResult(StandardEventArgsDeserialiser(response));
             });
         }
-        public void Update(string password)
+        public void Update(string password, string token)
         {
             var client = new RestClient(Core.siteMap.userDir[SiteMap.UserMethod.update]);
 
             var request = new RestRequest();
             request.RequestFormat = DataFormat.Json;
             request.Method = Method.POST;
-            request.AddParameter("body", Main.Core.Token);
+            request.AddParameter("body", token);
             request.AddParameter("firstname", Firstname);
             request.AddParameter("lastname", Lastname);
             request.AddParameter("email", Email);
             request.AddParameter("password", password);
-            request.AddParameter("newemail", Newemail ?? "");
+            request.AddParameter("newemail", Newemail == null ? Email : Newemail);
             request.AddParameter("position", Position);
 
             //Console.WriteLine(JsonConvert.SerializeObject(request, Formatting.Indented));
@@ -237,7 +242,7 @@ namespace API
                 OnUpdateResult(StandardEventArgsDeserialiser(response));
             });
         }
-        public void Create(string password)
+        public void Create(string password, string token)
         {
             var client = new RestClient(Core.siteMap.userDir[SiteMap.UserMethod.create]);
 
@@ -245,7 +250,7 @@ namespace API
             request.RequestFormat = DataFormat.Json;
             request.Method = Method.POST;
 
-            request.AddParameter("body", Main.Core.Token);
+            request.AddParameter("body", token);
             request.AddParameter("firstname", Firstname);
             request.AddParameter("lastname", Lastname);
             request.AddParameter("email", Email);

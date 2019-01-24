@@ -18,7 +18,7 @@
     // var_dump(file_get_contents("php://input"));
     // exit();
 
-    if(isset($_GET))
+    if(count((array)$_GET) > 0)
     $data = json_decode(json_encode($_GET));
         else
     $data = json_decode(file_get_contents("php://input"));
@@ -31,13 +31,14 @@
                 ""
             ));
     }
-    else if(count((array)$data) == 1)
+    else if(count((array)$data) == 2)
     {
         $result = Util::isEmptyArray($data);
 
         if(count((array)$result) > 0)
         {
-            Response::res401(new ResponseBody("Invalid input.", $result));
+            if(!in_array("email", $result))
+                Response::res401(new ResponseBody("Invalid input.", $result));
         }
     }
     else
@@ -53,12 +54,26 @@
         {
             Response::res400(
                 new ResponseBody(
-                    "User does not exist.", 
+                    "Requesting user does not exist.", 
                     ""
                 ));
         }
+
+        if(strlen($data->email) != 0)
+        {
+            $user = new User($db);
+            $user->email = $data->email;
+            if(!$user->emailExists())
+            {
+                Response::res400(
+                    new ResponseBody(
+                        "Target user does not exist.", 
+                        ""
+                    ));
+            }
+        }
     
-        $status->user_id = $decoded->data->id;
+        $status->user_id = $user->id;
 
         if($result = $status->get()){
             Response::res200(

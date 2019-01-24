@@ -16,8 +16,13 @@
     $sender = new User($db);
     $user = new User($db);
 
+    // var_dump($_GET);
+    // var_dump($_POST);
+    // var_dump(file_get_contents("php://input"));
+    // exit();
+
     // get posted data
-    if(isset($_POST))
+    if(count((array)$_POST) > 0)
         $data = json_decode(json_encode($_POST));
     else
         $data = json_decode(file_get_contents("php://input"));
@@ -98,6 +103,9 @@
         $user->position = $data->position;
         $user->newemail = $data->newemail;
         $user->email = $data->email;
+
+        // var_dump($user);
+        // exit();
 
         // delete the user
         if($user->update()){

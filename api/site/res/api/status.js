@@ -7,17 +7,13 @@ class Status
         this.user_id = user_id;
     }
 
-    get(token, sucess, error)
+    get(email, token, sucess, error)
     {
-        let data = {
-            "body" : token
-        }
-
         $.ajax({
             method: "GET",
             dataType: "json",
             url: "../../api/api/status/get.php",
-            data: data,
+            data: {body : token, email : email},
             success: function (data) {
                 this.status = data["body"]["status"];
                 this.updated = data["body"]["updated"];
@@ -25,6 +21,7 @@ class Status
                 sucess(data);
             },
             error: function (xhr, status) {
+                //console.log(xhr.responseText);
                 error(xhr.responseText);
             }
           })
@@ -41,11 +38,13 @@ class Status
             method: "POST", 
             dataType: "json",
             url: "../../api/api/status/set.php",
-            data: JSON.stringify(data),
+            data: data,
             success: function (data) {
+                //console.log(data);
                 sucess(data);
             },
             error: function (xhr, status) {
+                //console.log(xhr.responseText);
                 error(xhr.responseText);
             }
           })

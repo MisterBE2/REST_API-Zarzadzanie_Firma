@@ -7,28 +7,26 @@ namespace Test
 {
     class Program
     {
-        public static string Token { get; set; }
+        static Core Core = new Core();
 
         static void Main(string[] args)
         {
             Console.WriteLine("Start");
 
+            Core.TokenSet += Core_TokenSet;
+            Core.MainUserStatusSet += Core_UserStatusSet;
 
-            API.Main.Core.TokenSet += Core_TokenSet;
-            API.Main.Core.MainUserStatusSet += Core_MainUserStatusSet;
-            Core.mainUser.Email = "admin";
+            Core.User.TokenResult += User_tokenResult;
+            Core.User.ValidateResult += User_validateResult;
+            Core.User.GetResult += User_getResult;
+            Core.User.Email = "admin";
 
-            
-            Core.mainUser.TokenResult += User_tokenResult;
-            Core.mainUser.ValidateResult += User_validateResult;
-            Core.mainUser.GetResult += User_getResult;
+            Core.User.Token("admin");
 
-            Print("Token");
-            Core.mainUser.Token("admin");
             Console.ReadKey();
         }
 
-        private static void Core_MainUserStatusSet(object sender, Core.StatusSetEventArgs e)
+        private static void Core_UserStatusSet(object sender, Core.StatusSetEventArgs e)
         {
             Console.WriteLine("User updated status!");
             Print(e.Status.StatusContent);
@@ -36,8 +34,11 @@ namespace Test
 
         private static void Core_TokenSet(object sender, Core.TokenSetEventArgs e)
         {
-            //Core.mainUser.Validate();
-            //Core.mainUser.Get();
+            //Console.WriteLine("Token set!");
+            //Print(e.Token);
+
+            //Core.User.Validate(e.Token);
+            Core.User.Get("", e.Token);
 
             //Console.WriteLine("Creating user");
             //User temp = new User
@@ -49,7 +50,7 @@ namespace Test
             //};
 
             //temp.CreateResult += Temp_CreateResult;
-            //temp.Create("12345");
+            //temp.Create("12345", e.Token);
 
             //Message mes = new Message
             //{
@@ -58,7 +59,7 @@ namespace Test
             //};
 
             //mes.MessageSend += Mes_MessageSend;
-            //mes.Send();
+            //mes.Send(e.Token);
 
             //Message mes = new Message
             //{
@@ -66,20 +67,22 @@ namespace Test
             //};
 
             //mes.MessageGet += Mes_MessageGet;
-            //mes.Get(0, 100);
+            //mes.Get(0, 100, e.Token);
 
             //Status st = new Status();
             //st.StatusContent = "Status z api!";
-            //st.User_id = Core.mainUser.Id;
-
+            //st.User_id = Core.User.Id;
             //st.StatusSet += St_StatusSet;
-            //st.StatusGet += St_StatusGet;
+            //st.Set(e.Token);
 
-            //st.Set();
-            //st.Get();
+            //Status st = new Status();
+            //st.StatusContent = "Status z api!";
+            //st.User_id = Core.User.Id;
+            //st.StatusGet += St_StatusGet;
+            //st.Get(e.Token);
         }
 
-        private static void St_StatusGet(object sender, Status.GetEventsArgs e)
+        private static void St_StatusGet(object sender, Status.StatusEventsArgs e)
         {
             Console.WriteLine("Receiving status done");
             Print(e.ResponseCode.ToString());
@@ -114,7 +117,7 @@ namespace Test
             Print(e.ResponseCode.ToString());
             Print(e.Body);
 
-            if(e.ResponseCode == HttpStatusCode.OK)
+            if (e.ResponseCode == HttpStatusCode.OK)
             {
                 string json = JsonConvert.SerializeObject(e.Messages, Formatting.Indented);
                 Print(json);
@@ -132,7 +135,7 @@ namespace Test
             u.Firstname = "Jadwiga";
 
             u.UpdateResult += U_UpdateResult;
-            u.Update("");
+            u.Update("", Core.Token);
         }
 
         private static void U_UpdateResult(object sender, User.StandardEventArgs e)
@@ -145,7 +148,7 @@ namespace Test
             User u = (User)sender;
 
             u.DeleteResult += U_DeleteResult;
-            u.Delete();
+            u.Delete(Core.Token);
         }
 
         private static void U_DeleteResult(object sender, User.StandardEventArgs e)
@@ -182,13 +185,25 @@ namespace Test
             Print(e.Message);
             if (e.User != null)
             {
-                string json = JsonConvert.SerializeObject(e.User, Formatting.Indented);
-                Print(json);
+                Print(JsonConvert.SerializeObject(e.User, Formatting.Indented));
+
+                Print(JsonConvert.SerializeObject(Core.User, Formatting.Indented));
+
+                Status st = new Status();
+                st.StatusGet += St_StatusGet1;
+                st.User_id = e.User.Id;
+                st.User_id = Core.User.Id;
+                st.Get(Core.Token);
             }
             else
             {
                 Print(e.Body);
             }
+        }
+
+        private static void St_StatusGet1(object sender, Status.StatusEventsArgs e)
+        {
+            Core.Status = e.Status;
         }
 
         private static void User_tokenResult(object sender, User.StandardEventArgs e)
@@ -200,7 +215,7 @@ namespace Test
 
             if (e.ResponseCode == HttpStatusCode.OK)
             {
-                API.Main.Core.Token = e.Body;
+                Core.Token = e.Body;
             }
         }
 

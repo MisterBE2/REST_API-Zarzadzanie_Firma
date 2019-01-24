@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
 
 namespace API
 {
     public class Core
     {
         public static SiteMap siteMap = new SiteMap();
-        public static User mainUser = new User();
+        public User User = new User();
 
         #region Token
         private string token;
-        public string Token {
+        public string Token
+        {
             get
             {
                 return token;
@@ -21,7 +20,8 @@ namespace API
             set
             {
                 token = value;
-                OnTokenSet(new TokenSetEventArgs(token));
+                if (value != null)
+                    OnTokenSet(new TokenSetEventArgs(token));
             }
         }
 
@@ -36,13 +36,13 @@ namespace API
 
             public TokenSetEventArgs(string token)
             {
-                this.Token = token;
+                Token = token;
             }
         }
         #endregion
 
         #region Users
-        private List<User> users;
+        private List<User> users = new List<User>();
         public List<User> Users
         {
             get
@@ -67,13 +67,13 @@ namespace API
 
             public UsersSetEventArgs(List<User> users)
             {
-                this.Users = users;
+                Users = users;
             }
         }
         #endregion
 
         #region main user status
-        private Status status;
+        private Status status = new Status();
         public Status Status
         {
             get
@@ -83,7 +83,7 @@ namespace API
             set
             {
                 status = value;
-                OnMainUserStatusSet(new StatusSetEventArgs(status));
+                OnMainUserStatusSet(new StatusSetEventArgs(value));
             }
         }
 
@@ -98,7 +98,7 @@ namespace API
 
             public StatusSetEventArgs(Status status)
             {
-                this.Status = status;
+                Status = status;
             }
         }
         #endregion

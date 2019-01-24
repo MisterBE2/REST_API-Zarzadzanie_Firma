@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="TheSystem.UserControls.UserSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TheSystem.UserControls"
+             mc:Ignorable="d" d:DesignWidth="800" KeyDown="UserControl_KeyDown">
+    <Border Background="White" CornerRadius="5" BorderThickness="1" BorderBrush="#c6c6c6">
+        <Grid>
+            <StackPanel Margin="10">
+                <Label Content="Personal Information" x:Name="labelheader" FontWeight="Bold" FontSize="20" HorizontalContentAlignment="Center"/>
+                <Border BorderBrush="#d6dade" BorderThickness="0,1,0,1" Margin="0,10">
+                    <StackPanel Width="500" Margin="0,10">
+                        <Label Content="Name" FontSize="16" Padding="0,5" />
+                        <Border BorderBrush="#d6dade" BorderThickness="1,1,1,1" CornerRadius="3">
+                            <TextBox x:Name="textBoxName" Text="" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="16" Margin="0,5" Height="23"/>
+                        </Border>
+                        <Label Content="Surname" FontSize="16" Padding="0,5" Margin="0,10,0,0"/>
+                        <Border BorderBrush="#d6dade" BorderThickness="1,1,1,1" CornerRadius="3">
+                            <TextBox x:Name="textBoxSurname" Text="" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="16" Margin="0,5" Height="23"/>
+                        </Border>
+                        <Label Content="Position" FontSize="16" Padding="0,5" Margin="0,10,0,0"/>
+                        <Border BorderBrush="#d6dade" BorderThickness="1,1,1,1" CornerRadius="3">
+                            <TextBox x:Name="textBoxPosition" Text="" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="16" Margin="0,5" Height="23"/>
+                        </Border>
+                        <Label Content="Email" FontSize="16" Padding="0,5" Margin="0,10,0,0"/>
+                        <Border BorderBrush="#d6dade" BorderThickness="1,1,1,1" CornerRadius="3">
+                            <TextBox x:Name="textBoxEmail" Text="" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="16" Margin="0,5" Height="23"/>
+                        </Border>
+                        <Label Content="Password" FontSize="16" Padding="0,5" Margin="0,10,0,0"/>
+                        <Border BorderBrush="#d6dade" BorderThickness="1,1,1,1" CornerRadius="3">
+                            <PasswordBox x:Name="textBoxPassword" Password="" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="16" Margin="0,5" Height="23"/>
+                        </Border>
+                    </StackPanel>
+                </Border>
+                <WrapPanel>
+                    <Button x:Name="userSettingsButton" Content="Save" Foreground="White" Background="#1573fb" Padding="10,5" FontSize="16" Cursor="Hand" Click="ButtonSave_Click" BorderBrush="{x:Null}"/>
+                    <Button x:Name="userSettingsButton2" Content="Close" Margin="10,0"  Foreground="White" Background="#636c73" Padding="10,5" FontSize="16" Cursor="Hand" Click="ButtonClose_Click" BorderBrush="{x:Null}"/>
+                </WrapPanel>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

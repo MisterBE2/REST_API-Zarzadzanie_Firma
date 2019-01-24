@@ -1,0 +1,12 @@
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\API\bin\Release\API.dll
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\API\bin\Release\API.pdb
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\API\bin\Release\Newtonsoft.Json.dll
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\API\bin\Release\RestSharp.dll
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\API\bin\Release\Newtonsoft.Json.pdb
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\API\bin\Release\Newtonsoft.Json.xml
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\API\bin\Release\RestSharp.xml
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\API\obj\Release\API.csprojAssemblyReference.cache
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\API\obj\Release\API.csproj.CoreCompileInputs.cache
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\API\obj\Release\API.csproj.CopyComplete
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\API\obj\Release\API.dll
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\desktop\API\obj\Release\API.pdb

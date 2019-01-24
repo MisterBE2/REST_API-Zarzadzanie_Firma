@@ -13,7 +13,7 @@ namespace API
         public string User_to { get; set; }
         public DateTime Sended { get; set; }
 
-        public Message() { }
+        public Message() {}
         public Message(string message, string user_from, string user_to, DateTime sended)
         {
             MessageContent = message;
@@ -42,7 +42,7 @@ namespace API
         }
         #endregion
         #region API calls
-        public void Send()
+        public void Send(string token)
         {
             var client = new RestClient(Core.siteMap.messageDir[SiteMap.MessageMethod.send]);
 
@@ -53,11 +53,11 @@ namespace API
             };
             request.AddParameter("email", User_to);
             request.AddParameter("message", MessageContent);
-            request.AddParameter("body", Main.Core.Token);
+            request.AddParameter("body", token);
 
             client.ExecuteAsync(request, response => { OnMessageSend(StandardEventArgsDeserialiser(response)); });
         }
-        public void Get(int page, int ammount)
+        public void Get(int page, int ammount, string token)
         {
             var client = new RestClient(Core.siteMap.messageDir[SiteMap.MessageMethod.get]);
 
@@ -69,7 +69,7 @@ namespace API
             request.AddParameter("email", User_from);
             request.AddParameter("page", page);
             request.AddParameter("ammount", ammount);
-            request.AddParameter("body", Main.Core.Token);
+            request.AddParameter("body", token);
 
             client.ExecuteAsync(request, response =>
             {

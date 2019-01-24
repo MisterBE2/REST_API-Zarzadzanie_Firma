@@ -85,7 +85,7 @@ class User
             method: "POST", 
             dataType: "json",
             url: "../../api/api/user/create.php",
-            data: JSON.stringify(data),
+            data: data,
             success: function (data) {
                 //console.log(data);
                 sucess(data);
@@ -112,16 +112,16 @@ class User
         //console.log(data);
 
         $.ajax({
-            method: "PATCH", 
+            method: "POST", 
             dataType: "json",
             url: "../../api/api/user/update.php",
-            data: JSON.stringify(data),
+            data: data,
             success: function (data) {
                 //console.log(data);
                 sucess(data);
             },
             error: function (xhr, status) {
-               // console.log(xhr.responseText);
+                //console.log(xhr.responseText);
                 error(xhr.responseText);
             }
         })

@@ -32,7 +32,7 @@ namespace API
         #region helpers
         #endregion
         #region API calls
-        public void Set()
+        public void Set(string token)
         {
             var client = new RestClient(Core.siteMap.statusDir[SiteMap.StatusMethod.set]);
 
@@ -42,11 +42,23 @@ namespace API
                 Method = Method.POST
             };
             request.AddParameter("status", StatusContent);
-            request.AddParameter("body", Main.Core.Token);
+            request.AddParameter("body", token);
 
-            client.ExecuteAsync(request, response => { OnStatusSet(StandardEventArgsDeserialiser(response)); });
+            client.ExecuteAsync(request, response => {
+                StatusEventsArgs args = new StatusEventsArgs
+                {
+                    ResponseCode = response.StatusCode,
+                    Status = this
+                };
+
+                StandardEventArgs standArgs = StandardEventArgsDeserialiser(response);
+                args.Body = standArgs.Body;
+                args.Message = standArgs.Message;
+
+                OnStatusSet(args);
+            });
         }
-        public void Get()
+        public void Get(string email, string token)
         {
             var client = new RestClient(Core.siteMap.statusDir[SiteMap.StatusMethod.get]);
 
@@ -55,11 +67,13 @@ namespace API
                 RequestFormat = DataFormat.Json,
                 Method = Method.GET
             };
-            request.AddParameter("body", Main.Core.Token);
+            request.AddParameter("body", token);
+            request.AddParameter("email", email);
+
 
             client.ExecuteAsync(request, response =>
             {
-                GetEventsArgs args = new GetEventsArgs();
+                StatusEventsArgs args = new StatusEventsArgs();
                 args.ResponseCode = response.StatusCode;
 
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -67,6 +81,9 @@ namespace API
                     JObject o = JObject.Parse(response.Content);
                     args.Message = (string)o["message"];
                     args.Status = new Status((string)o["body"]["status"], (string)o["body"]["updated"], (string)o["body"]["user_id"]);
+                    StatusContent = args.Status.StatusContent;
+                    User_id = args.Status.User_id;
+                    Updated = args.Status.Updated;
                 }
                 else
                 {
@@ -76,23 +93,24 @@ namespace API
                     args.Status = null;
                 }
 
-                if (this.User_id == Core.mainUser.Id)
-                    Main.Core.Status = args.Status;
-
                 OnStatusGet(args);
             });
         }
+        public void Get(string token)
+        {
+            Get("", token);
+        }
         #endregion
         #region events
-        public event EventHandler<StandardEventArgs> StatusSet;
-        public event EventHandler<GetEventsArgs> StatusGet;
+        public event EventHandler<StatusEventsArgs> StatusSet;
+        public event EventHandler<StatusEventsArgs> StatusGet;
         #endregion
         #region on events
-        protected virtual void OnStatusSet(StandardEventArgs e)
+        protected virtual void OnStatusSet(StatusEventsArgs e)
         {
             StatusSet?.Invoke(this, e);
         }
-        protected virtual void OnStatusGet(GetEventsArgs e)
+        protected virtual void OnStatusGet(StatusEventsArgs e)
         {
             StatusGet?.Invoke(this, e);
         }
@@ -125,7 +143,7 @@ namespace API
 
             return args;
         }
-        public class GetEventsArgs : EventArgs
+        public class StatusEventsArgs : EventArgs
         {
             public HttpStatusCode ResponseCode { get; set; }
             public string Message { get; set; }
@@ -133,6 +151,5 @@ namespace API
             public Status Status { get; set; }
         }
         #endregion
-
     }
 }

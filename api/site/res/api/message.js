@@ -23,7 +23,7 @@ class Message
             method: "POST", 
             dataType: "json",
             url: "../../api/api/message/send.php",
-            data: JSON.stringify(data),
+            data: data,
             success: function (data) {
                 //console.log();
                 sucess(data);

@@ -48,7 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
