@@ -58,3 +58,13 @@ D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\RE
 D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\mobile\TheSystemMObile\obj\Debug\81\linksrc\System.Runtime.Serialization.pdb
 D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\mobile\TheSystemMObile\obj\Debug\81\linksrc\System.ServiceModel.Internals.pdb
 D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\mobile\TheSystemMObile\obj\Debug\81\linksrc\Mono.Security.pdb
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\mobile\TheSystemMObile\obj\Debug\81\android\assets\Mono.Android.pdb
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\mobile\TheSystemMObile\obj\Debug\81\android\assets\Mono.Security.pdb
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\mobile\TheSystemMObile\obj\Debug\81\android\assets\mscorlib.pdb
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\mobile\TheSystemMObile\obj\Debug\81\android\assets\System.Core.pdb
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\mobile\TheSystemMObile\obj\Debug\81\android\assets\System.Net.Http.pdb
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\mobile\TheSystemMObile\obj\Debug\81\android\assets\System.pdb
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\mobile\TheSystemMObile\obj\Debug\81\android\assets\System.Runtime.Serialization.pdb
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\mobile\TheSystemMObile\obj\Debug\81\android\assets\System.ServiceModel.Internals.pdb
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\mobile\TheSystemMObile\obj\Debug\81\android\assets\System.Xml.pdb
+D:\Programy\XAMPP\htdocs\php\projekty\EiT\Programowanie Aplikacyjne\Projekt 2\REST_API-Zarzadzanie_Firma\mobile\TheSystemMObile\obj\Debug\81\android\assets\TheSystemMObile.pdb
